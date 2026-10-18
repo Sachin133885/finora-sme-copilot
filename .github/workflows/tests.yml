@@ -15,8 +15,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Install PDF test dependency
-        run: npm install --no-save --package-lock=false @napi-rs/canvas
+            - name: Install test dependencies
+        run: npm install --include=dev --package-lock=false
 
       - name: Compile Worker
         run: node scripts/compile.mjs
