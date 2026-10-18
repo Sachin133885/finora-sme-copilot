@@ -1,0 +1,29 @@
+name: Finora regression tests
+
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Compile Worker
+        run: node scripts/compile.mjs
+
+      - name: Rebuild offline demonstration
+        run: node scripts/standalone.mjs
+
+      - name: Run regression suites
+        run: node scripts/test.mjs
+
+      - name: Validate Worker artifact
+        run: node scripts/validate-artifact.mjs
