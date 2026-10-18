@@ -20,8 +20,8 @@
     "SHA256SUMS.txt"
   ],
   "tests": {
-    "suites_passed": 30,
-    "suites_total": 30,
+    "suites_passed": 31,
+    "suites_total": 31,
     "sql_integration": "PGlite with simulated Supabase Auth schema",
     "real_supabase_project_verified": false,
     "real_browser_check": false,
@@ -29,5 +29,6 @@
   },
   "deployment_target": "Render Free with Supabase; optional Vercel frontend",
   "status": "prepared and locally tested; not deployed",
-  "migration_guide": "docs/RENDER_SETUP.md"
+  "migration_guide": "docs/RENDER_SETUP.md",
+  "password_recovery": "implemented locally; awaiting GitHub upload, Render redeploy, Supabase redirect allowlist and real email verification"
 }

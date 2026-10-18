@@ -1,5 +1,6 @@
 import {randomBytes,timingSafeEqual} from 'node:crypto';
 import {seed,profiles,validateData,AS_OF} from './engine.js';
+import {recoveryHTML,recoveryJS} from './password-recovery.mjs';
 
 const security={'cache-control':'no-store','x-content-type-options':'nosniff','referrer-policy':'same-origin','x-frame-options':'DENY','content-security-policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"};
 const uuid=x=>typeof x==='string'&&/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(x);
@@ -56,6 +57,7 @@ export function createRenderHandler(env,{worker,fetcher=fetch}={}){
   try{
    const url=new URL(request.url),route=url.pathname,method=request.method;
    if(route==='/healthz')return reply({ok:true,service:'Finora',snapshot:AS_OF});
+   if(method==='GET'&&(route==='/reset-password'||route==='/password-recovery.js'))return new Response(route==='/reset-password'?recoveryHTML:recoveryJS,{headers:{...security,'referrer-policy':'no-referrer','content-type':route==='/reset-password'?'text/html;charset=utf-8':'text/javascript;charset=utf-8'}});
    if(route==='/signin-with-chatgpt'||route==='/signout-with-chatgpt')return new Response(null,{status:302,headers:{...security,location:'/#account'}});
    if(!['GET','HEAD','POST','PUT','DELETE'].includes(method))return reply({error:'Method not allowed'},405);
    let origin=request.headers.get('origin');if(origin&&!allowed.has(origin))return reply({error:'Origin rejected'},403);
@@ -63,6 +65,30 @@ export function createRenderHandler(env,{worker,fetcher=fetch}={}){
    if(mutating&&!allowed.has(origin))return reply({error:'Origin required'},403);
    if(mutating&&!request.headers.get('content-type')?.startsWith('application/json'))return reply({error:'JSON required'},415);
    let body=null;if(mutating){const text=await request.text();if(Buffer.byteLength(text)>1500000)return reply({error:'Request too large'},413);try{body=JSON.parse(text);}catch{return reply({error:'Invalid JSON'},400);}if(!body||Array.isArray(body)||typeof body!=='object')return reply({error:'Invalid JSON object'},400);}
+   if(route==='/api/password-recovery'||route==='/api/password-reset'){
+    if(method!=='POST')return reply({error:'Method not allowed'},405);
+    const minute=Math.floor(Date.now()/60000);if(minute!==limitMinute){limits.clear();limitMinute=minute;}
+    const recovery=route==='/api/password-recovery',email=String(body.email||'').trim().toLowerCase();
+    const key=recovery?'recovery:'+email.slice(0,120):'reset-total',count=(limits.get(key)||0)+1,total=(limits.get('total')||0)+1;limits.set(key,count);limits.set('total',total);
+    if(count>(recovery?3:20)||total>120)return reply({error:'Try again later'},429);
+    if(recovery){
+     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>120)return reply({error:'Invalid email'},400);
+     const redirect=app.origin+'/reset-password?lang='+(body.lang==='zh'?'zh':'en');
+     const r=await upstream('/auth/v1/recover?redirect_to='+encodeURIComponent(redirect),{method:'POST',headers:authHeaders(),body:JSON.stringify({email})});
+     if(r.status===429)return reply({error:'Email rate limit reached. Wait before retrying.'},429);
+     if(!r.ok) return reply({error:'Password recovery unavailable. Check email service configuration.'},400);
+     return reply({ok:true});
+    }
+    if(typeof body.token!=='string'||!body.token||body.token.length>16000||typeof body.password!=='string'||body.password.length<12||body.password.length>128)return reply({error:'Invalid reset request'},400);
+    const user=await verifiedUser(body.token);if(!user)return reply({error:'Reset link invalid or expired'},401);
+    const r=await upstream('/auth/v1/user',{method:'PUT',headers:{...authHeaders(),authorization:'Bearer '+body.token},body:JSON.stringify({password:body.password})});
+    if(!r.ok)return reply({error:'Password update rejected. Use a different password or request a new link.'},r.status===429?429:400);
+    // Revoke the recovery session and other sessions; never create or open workspaces.
+    let sessionsRevoked=false;
+    try{sessionsRevoked=(await upstream('/auth/v1/logout?scope=global',{method:'POST',headers:{...authHeaders(),authorization:'Bearer '+body.token}})).ok;}catch{/* Password was already updated; do not report that it failed. */}
+    set=clearCookies();
+    return reply({ok:true,sessionsRevoked});
+   }
    if(route==='/api/login'||route==='/api/register'){
     if(method!=='POST')return reply({error:'Method not allowed'},405);
     const email=String(body.email||'').trim().toLowerCase(),password=body.password;
