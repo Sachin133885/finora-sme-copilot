@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+*.pem
+*.key
+data/
+*.sqlite*
+*.db
+*.db-*
+backups/
+node_modules/
+.wrangler/
+.DS_Store
+*.log
