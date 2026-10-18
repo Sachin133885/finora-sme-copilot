@@ -1,0 +1,19 @@
+{
+  "name": "finora-sme-copilot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "build": "node scripts/compile.mjs",
+    "build:web": "node scripts/export-web.mjs",
+    "start": "node scripts/render-server.mjs",
+    "test": "node scripts/test.mjs"
+  },
+  "devDependencies": {
+    "@napi-rs/canvas": "0.1.100",
+    "@electric-sql/pglite": "0.5.10"
+  }
+}

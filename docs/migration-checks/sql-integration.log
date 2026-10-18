@@ -1,0 +1,1 @@
+PASS actual PostgreSQL-compatible SQL execution, idempotence, private schema, service-only RPC, roles, isolation, revisions and non-destructive initialization

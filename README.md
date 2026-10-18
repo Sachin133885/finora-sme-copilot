@@ -1,3 +1,15 @@
+# Finora Render and Supabase migration candidate
+
+Topic E SME Finance Copilot. This candidate adds verified Supabase login and persistent role-controlled workspaces to the complete existing app. It is prepared for Render Free, with an optional Vercel static frontend after the backend is verified.
+
+**Start with [the setup guide](docs/RENDER_SETUP.md).** The SQL file is `supabase/finora.sql`. Render build: `npm install --omit=dev --package-lock=false && npm run build`. Render start: `npm start`. Enter actual Supabase keys only in Render Environment settings. No runtime secrets are in this repository.
+
+This source has passed 30 local regression suites and isolated PostgreSQL-compatible SQL integration tests. It has not been deployed to Render/Vercel or connected to the user's actual Supabase Auth/database/provider during preparation. It does not automatically transfer the original Site's accounts or records. Keep the original app and backups until migration is verified.
+
+The financial engine, receipt logic, rescue algorithm and tour modules are unchanged. English/Chinese UI and all existing workspaces remain. Login uses Supabase on this deployment; the original Site retains its own sign-in system. Authentication, data-store and hosting sections below are historical baseline documentation and are superseded by the setup guide for this candidate.
+
+## Original Site baseline documentation
+
 # Finora — SME Finance Copilot
 
 **2026 Shenzhen International FinTech Competition · Topic E**

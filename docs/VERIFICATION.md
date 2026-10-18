@@ -1,3 +1,11 @@
+# Migration verification — 18 October 2026
+
+The Render/Supabase candidate passed 30/30 local suites, compiled Worker validation, local Node HTTP checks, static export, and actual PGlite SQL execution with simulated Supabase Auth roles/users. SQL idempotence, revision conflicts, UUID permissions, revocation and email reuse were tested. See migration-checks logs.
+
+No real Supabase, Render, Vercel, mobile browser or live AI response has been verified for this candidate. The GitHub baseline passed its earlier 26-suite workflow; this migration has not been uploaded. No existing Site records or hosting configuration were changed.
+
+## Historical baseline verification
+
 # Submission verification — 18 October 2026
 
 ## Source provenance
