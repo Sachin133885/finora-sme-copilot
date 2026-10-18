@@ -1,0 +1,8 @@
+import assert from 'node:assert/strict';
+import {seed,summary,forecast} from '../src/engine.js';import {safeToSpend} from '../src/mobile-engine.js';import {postReceipt} from '../src/pdf-receipts.js';
+const d=seed('chengdu');d.opening+=10250000-summary(d).cash;d.settings.reserve=1300000;
+let s=safeToSpend(d);assert.equal(s.current,10250000);assert.equal(s.lowest,10250000);assert.equal(s.available,8950000);assert.equal(s.date,'2026-10-13');
+d.settings.reserve=12000000;assert.equal(safeToSpend(d).available,0);d.settings.reserve=1300000;const before=safeToSpend(d);d.settings.reserve+=10000;assert.equal(safeToSpend(d).available,before.available-10000);
+const r={receiptId:'SAFE-TEST',date:'2026-10-12',businessId:'chengdu',type:'expense',party:'Test Supplier',category:'other',description:'Test',method:'bank',currency:'CNY',subtotal:'100.00',tax:'0.00',total:'100.00',invoiceId:'',paymentStatus:'PAID'};const next=postReceipt(d,r,{confirmed:true,paid:true,role:'owner'});assert.equal(safeToSpend(next).available,safeToSpend(d).available-10000);
+const base=forecast(seed('shenzhen')),stress=forecast(seed('shenzhen'),{delay:14});assert.notDeepEqual(base.points,stress.points);assert.equal(base.points[0].date,'2026-10-13');assert.equal(base.events.filter(e=>e.id==='INV-1048').length,1);assert.equal(base.events.find(e=>e.id==='INV-1048').amount,1700000);assert.equal(base.events.filter(e=>e.id==='BILL-0201').length,1);assert.equal(base.events.filter(e=>e.id==='FC-PAY').length,1);
+console.log('PASS safe-to-spend 89,500 example, zero, buffer/receipt recalculation, opening date, remaining collections, bills, recurring costs and stress');

@@ -1,0 +1,7 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';import {seed} from '../src/engine.js';import {businessAnalysis,explainBusiness} from '../src/business-ai.js';
+assert.equal(businessAnalysis(seed('shenzhen'),'how to use this app?','en','cash',null,{days:30,hiring:10000}).kind,'help');
+let calls=[];globalThis.fetch=async(url,options)=>{calls.push(JSON.parse(options.body));if(calls.length===1)return new Response(JSON.stringify({candidates:[{content:{role:'model',parts:[{functionCall:{name:'read_business_analysis',args:{topic:'cash'}},thoughtSignature:'test-signature'}]}}]}));return new Response(JSON.stringify({candidates:[{content:{role:'model',parts:[{text:'Review the supplier bill and uncertain collections before deciding. Check the verified figures.'}]}}]}));};
+const result=await explainBusiness({LLM_API_KEY:'mock-secret',LLM_ENDPOINT:'https://generativelanguage.googleapis.com/v1beta/models/test:generateContent',LLM_MODEL:'test'},seed('shenzhen'),'Will I have enough cash?','en','cash',null,null,[{question:'Earlier cash question',scenario:null}]);
+assert.equal(result.mode,'live');assert.ok(calls[1].contents[1].parts[0].thoughtSignature);assert.ok(calls[0].contents[0].parts[0].text.includes('Earlier cash question'),'follow-up context is missing');
+assert.ok(!JSON.stringify(calls).includes('Shenzhen Bloom Commerce'),'raw business name must not be sent to provider');
+console.log('PASS help routing, native Gemini tool flow, preserved signature, bounded context and minimized provider payload');

@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';import {pathToFileURL} from 'node:url';import {installTourDOM} from './helpers/tour-dom.mjs';
+const dom=installTourDOM();Object.assign(globalThis,{location:{hash:'#collections',protocol:'file:'},innerWidth:390});dom.storage.set('finora-lang','en');dom.storage.set('finora-welcome-v2:guest','seen');
+const source=fs.readFileSync('src/app.js','utf8').replace(/from '\/(.*?)'/g,(_,f)=>'from '+JSON.stringify(pathToFileURL(process.cwd()+'/src/'+f).href))+`\nexport const inspect=()=>data;`;
+const app=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+const click=(action,extra={})=>{const n=document.createElement('button');n.dataset.action=action;for(const[k,v]of Object.entries(extra))n.dataset[k]=v;document.body.append(n);n.click();n.remove();};
+const open=()=>{click('nav',{page:'collections'});document.querySelector('[data-action="collectiondetail"]').click();document.querySelector('[data-action="copyreminder"]').click();};
+const failures=[];
+open();const original=document.querySelector('#remindercopy');original.value='Keep this unsubmitted reminder.';original.focus();click('more');click('closemodal');try{assert.equal(document.querySelector('#remindercopy'),original);assert.equal(original.value,'Keep this unsubmitted reminder.');assert.equal(document.activeElement,original);}catch{failures.push('More -> Close must restore original modal, draft and focus');}
+click('closemodal');app.inspect().drafts=Array.from({length:55},(_,n)=>({id:'OLD-'+n,text:'Retain historical draft '+n,date:'2026-10-12T00:00:00Z'}));open();document.querySelector('#remindercopy').value='A new reviewed reminder.';document.querySelector('[data-action="collectiondraftsave"]').click();assert.equal(app.inspect().drafts.length,55,'no draft save before confirmation');click('confirm');try{assert.equal(app.inspect().drafts.length,56);assert.equal(app.inspect().drafts[0].id,'OLD-0');}catch{failures.push('New draft must preserve every older saved draft');}
+// Choosing a real destination from More deliberately leaves the prior dialog closed.
+open();click('more');click('nav',{page:'reports'});assert.equal(document.querySelector('.flow-modal'),null);assert.equal(document.querySelector('.more-dialog'),null);
+assert.deepEqual(failures,[]);console.log('PASS original reminder DOM/focus restoration through More, full saved draft retention, confirmation and explicit navigation exit (simulated DOM)');

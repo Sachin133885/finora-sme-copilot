@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const css=fs.readFileSync('src/index.html','utf8');
+assert.match(css,/--app-frame-width:480px/);
+assert.match(css,/\.more-backdrop,\.flow-backdrop\{display:flex/);
+assert.match(css,/font-family:'Source Sans 3','Source Han Sans SC'/);
+assert.match(css,/font-size:1\.05em/);
+assert.match(css,/font-variant-numeric:tabular-nums lining-nums/);
+const {mixedScriptParts}=await import('../src/typography.js');
+assert.deepEqual(mixedScriptParts('使用 Finora AI 查看现金'),[{text:'使用 ',english:false},{text:'Finora AI',english:true},{text:' 查看现金',english:false}]);
+assert.deepEqual(mixedScriptParts('CNY 100.00'),[{text:'CNY 100.00',english:false}]);
+assert.deepEqual(mixedScriptParts('现金 100.00 元'),[{text:'现金 100.00 元',english:false}]);
+assert.deepEqual(mixedScriptParts('中文 <script>'),[{text:'中文 <',english:false},{text:'script',english:true},{text:'>',english:false}]);
+for(const n of ['source-sans-3-latin.woff2','source-han-sans-sc-regular.woff2','source-han-sans-sc-bold.woff2'])assert.equal(fs.readFileSync('src/fonts/'+n).subarray(0,4).toString(),'wOF2');
+console.log('Shared frame, mixed typography, numeric settings and font files checked; not browser layout tests.');
+// Text-node integration: preserves a paragraph's existing control and never parses markup.
+const {applyMixedTypography}=await import('../src/typography.js');
+let replacements=0;const control={value:'unsaved draft'};
+const parent={closest:s=>s.startsWith('p,')?parent:null};
+const textNode={parentElement:parent,textContent:'使用 Finora AI 查看现金',replaceWith(f){replacements++;this.parts=f.nodes;}};
+let activeNode=textNode;
+globalThis.document={createTreeWalker(){let visited=false;return {nextNode(){if(visited||!activeNode)return false;visited=true;this.currentNode=activeNode;return true;}};},createDocumentFragment(){return {nodes:[],append(n){this.nodes.push(n);}};},createElement(){return {};},createTextNode(text){return {textContent:text};}};
+applyMixedTypography({});assert.equal(replacements,1);assert.equal(textNode.parts[1].textContent,'Finora AI');assert.equal(textNode.parts[1].lang,'en');assert.equal(control.value,'unsaved draft');
+activeNode={...textNode,parentElement:{closest:s=>s.startsWith('p,')?parent:{}}};applyMixedTypography({});assert.equal(replacements,1,'existing spans, inputs and money fields are excluded');
+parent.textContent='请使用 Gemini AI 查看现金';activeNode={parentElement:parent,textContent:'Gemini AI',replaceWith(f){this.parts=f.nodes;}};applyMixedTypography({});assert.equal(activeNode.parts[0].className,'latin-run','Latin inside nested emphasis follows paragraph language');

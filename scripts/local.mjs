@@ -1,0 +1,4 @@
+import http from 'node:http';import fs from 'node:fs';
+const{default:worker}=await import('data:text/javascript;base64,'+Buffer.from(fs.readFileSync('dist/server/index.js','utf8')).toString('base64'));
+const env={LLM_ENDPOINT:process.env.LLM_ENDPOINT,LLM_MODEL:process.env.LLM_MODEL,LLM_API_KEY:process.env.LLM_API_KEY};
+http.createServer(async(req,res)=>{try{const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>1500000){res.writeHead(413);res.end('Too large');return;}chunks.push(chunk);}const r=await worker.fetch(new Request('http://localhost:3000'+req.url,{method:req.method,headers:req.headers,...(!['GET','HEAD'].includes(req.method)?{body:Buffer.concat(chunks)}:{})}),env);res.writeHead(r.status,Object.fromEntries(r.headers));res.end(Buffer.from(await r.arrayBuffer()));}catch{res.writeHead(500);res.end('Unable to process request');}}).listen(3000,()=>console.log('Finora: http://localhost:3000'));

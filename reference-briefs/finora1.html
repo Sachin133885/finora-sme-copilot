@@ -1,0 +1,1203 @@
+<h1>GPT-6 MASTER UPDATE PROMPT &mdash; FINORA 融财</h1>
+<h2>Real Financial Data + AI Copilot + Beginner-Friendly UX + Mobile-First Redesign</h2>
+<p>You are GPT-6 acting as a senior fintech product engineer, financial data researcher, AI integration specialist, UX/UI designer, full-stack developer, and quality-assurance engineer.</p>
+<p>Your task is to <strong>upgrade my existing Finora 融财 application in place</strong>.</p>
+<p><strong>Existing live application:</strong> <a href="https://finora-sme-copilot.bravehare4.chatgpt.site/">https://finora-sme-copilot.bravehare4.chatgpt.site/</a></p>
+<p><strong>Competition:</strong> 2026 Shenzhen International FinTech Competition &mdash; International Track, Topic E: SME Finance Copilot.</p>
+<p><strong>Product:</strong> Finora 融财 &mdash; AI-powered financial management for small and medium-sized businesses in China.</p>
+<p>The application already exists. Do not replace it with a new application, discard its existing functionality, or merely create a design mockup.</p>
+<p>First inspect the current codebase, identify the existing framework and functionality, understand how its data flows through the application, and then implement the following upgrades while preserving working features.</p>
+<p>If the current environment does not provide access to the source code through the URL, explain what access is missing and work with the available project files. Do not claim to have modified the live deployment without actually doing so.</p>
+<h1>PRIMARY OBJECTIVE</h1>
+<p>Transform Finora into a simple, mobile-friendly, bilingual financial assistant that helps Chinese small-business owners answer three questions:</p>
+<ol start="1">
+<li>
+<p>How is my business doing today?</p>
+</li>
+<li>
+<p>What financial problem needs my attention?</p>
+</li>
+<li>
+<p>What should I do next?</p>
+</li>
+</ol>
+<p>Prioritize usability, financial correctness, real-source data, explainable AI, and a polished user experience over unnecessary complexity.</p>
+<div><hr /></div>
+<h1>TASK 1 &mdash; REPLACE UNVERIFIED DEMO FINANCIAL CLAIMS WITH REAL, TRACEABLE CHINESE COMPANY DATA</h1>
+<p>Research publicly available annual reports and financial statements published by Chinese companies.</p>
+<p>Use web research where available, and prioritize official sources such as:</p>
+<ul>
+<li>
+<p>China Securities Regulatory Commission disclosure resources.</p>
+</li>
+<li>
+<p>CNINFO: <a href="https://www.cninfo.com.cn/">https://www.cninfo.com.cn/</a></p>
+</li>
+<li>
+<p>Official Shenzhen Stock Exchange disclosures.</p>
+</li>
+<li>
+<p>Official Shanghai Stock Exchange disclosures.</p>
+</li>
+<li>
+<p>Company investor-relations websites.</p>
+</li>
+<li>
+<p>Official annual-report PDFs and financial statements.</p>
+</li>
+</ul>
+<p>Start by identifying three suitable Chinese companies whose published financial reports can support a meaningful financial-analysis demonstration.</p>
+<p>Prefer smaller listed businesses or companies with understandable business models, such as retail, manufacturing, wholesale, consumer products, or services. Do not assume that a listed company is an SME solely because its business is familiar.</p>
+<p>Use the most recent complete annual report that can be verified at implementation time. For each selected company, record:</p>
+<ul>
+<li>
+<p>Legal company name in Chinese.</p>
+</li>
+<li>
+<p>English name, if officially available.</p>
+</li>
+<li>
+<p>Industry and business description.</p>
+</li>
+<li>
+<p>Reporting period.</p>
+</li>
+<li>
+<p>Publication date.</p>
+</li>
+<li>
+<p>Revenue.</p>
+</li>
+<li>
+<p>Operating costs, where disclosed.</p>
+</li>
+<li>
+<p>Operating profit or net profit.</p>
+</li>
+<li>
+<p>Operating cash flow.</p>
+</li>
+<li>
+<p>Accounts receivable, where disclosed.</p>
+</li>
+<li>
+<p>Accounts payable, where disclosed.</p>
+</li>
+<li>
+<p>Cash and cash equivalents, where disclosed.</p>
+</li>
+<li>
+<p>Relevant year-on-year changes.</p>
+</li>
+<li>
+<p>Exact official source URL.</p>
+</li>
+<li>
+<p>PDF page number, statement name, or table reference supporting each value.</p>
+</li>
+<li>
+<p>Reporting currency and units.</p>
+</li>
+</ul>
+<h3>Data quality rules</h3>
+<ol start="1">
+<li>
+<p>Verify every imported figure against its source.</p>
+</li>
+<li>
+<p>Record whether figures are annual, quarterly, year-end balances, or cash-flow totals.</p>
+</li>
+<li>
+<p>Preserve the original currency and units, including RMB, yuan, thousand yuan, or million yuan.</p>
+</li>
+<li>
+<p>Never combine incompatible periods or units.</p>
+</li>
+<li>
+<p>Never invent missing financial figures.</p>
+</li>
+<li>
+<p>Never present a derived estimate as a reported company fact.</p>
+</li>
+<li>
+<p>Where figures are calculated, document the formula.</p>
+</li>
+<li>
+<p>Store source URLs and retrieval metadata alongside the data.</p>
+</li>
+<li>
+<p>Include a visible "Source &amp; methodology" panel in the interface.</p>
+</li>
+<li>
+<p>Provide a link to the original report.</p>
+</li>
+<li>
+<p>Record the retrieval date and identify any unavailable information.</p>
+</li>
+<li>
+<p>Do not scrape private financial information or invent access to confidential business accounts.</p>
+</li>
+</ol>
+<h3>Important distinction: annual reports versus live SME operations</h3>
+<p>Public company annual reports are not the same as the daily transaction history of a small business.</p>
+<p>Use verified annual-report data for a dedicated <strong>Public Company Benchmark</strong> or <strong>Financial Report Analysis</strong> experience.</p>
+<p>Do not pretend that an annual revenue figure reveals a company's current bank balance, today's payments, live cash runway, or individual customer debts.</p>
+<p>For the main SME dashboard, use either:</p>
+<ul>
+<li>
+<p>Explicitly labeled synthetic SME transactions; or</p>
+</li>
+<li>
+<p>Actual business records uploaded or entered by the authorized user.</p>
+</li>
+</ul>
+<p>Clearly separate these data modes in the interface:</p>
+<p><strong>Mode A: Public Company Benchmark</strong></p>
+<ul>
+<li>
+<p>Historical reported financial data.</p>
+</li>
+<li>
+<p>Annual and quarterly comparisons when available.</p>
+</li>
+<li>
+<p>Revenue, profitability, and cash-flow analysis.</p>
+</li>
+<li>
+<p>Source citations and reporting-period labels.</p>
+</li>
+<li>
+<p>No unsupported daily-cash claims.</p>
+</li>
+</ul>
+<p><strong>Mode B: SME Workspace</strong></p>
+<ul>
+<li>
+<p>Actual user-provided transactions, invoices, balances, and bills.</p>
+</li>
+<li>
+<p>Forecasts based on the available records.</p>
+</li>
+<li>
+<p>Synthetic demonstration data when selected explicitly.</p>
+</li>
+<li>
+<p>Clear labels showing whether data is real user input or simulated.</p>
+</li>
+</ul>
+<p>Never mix one company's public data with another company's transactions or with a synthetic SME without explicitly labeling the comparison.</p>
+<h3>Benchmark experience</h3>
+<p>Create a company selector and comparison view.</p>
+<p>Let users select a company, year, and financial metric.</p>
+<p>Show:</p>
+<ul>
+<li>
+<p>Revenue trend.</p>
+</li>
+<li>
+<p>Profit trend.</p>
+</li>
+<li>
+<p>Operating cash flow.</p>
+</li>
+<li>
+<p>Reported versus calculated figures.</p>
+</li>
+<li>
+<p>Year-on-year change.</p>
+</li>
+<li>
+<p>Important limitations of the available data.</p>
+</li>
+</ul>
+<p>If three appropriate companies cannot be verified, use fewer verified companies rather than inventing data.</p>
+<div><hr /></div>
+<h1>TASK 2 &mdash; ADD A FUNCTIONAL, CONTEXT-AWARE AI FINANCE COPILOT</h1>
+<p>Integrate a small, useful AI assistant into the existing application.</p>
+<p>Do not build a disconnected chatbot that only returns generic responses.</p>
+<p>The AI must use the currently selected business, financial period, and actual records available to that business.</p>
+<h3>User experience</h3>
+<p>Add a compact AI assistant entry point that opens an expandable chat panel.</p>
+<p>On mobile, the chat should open as a full-screen or nearly full-screen workspace with an obvious close button.</p>
+<p>Display suggested questions relevant to the user's current page.</p>
+<p>Examples in English:</p>
+<ul>
+<li>
+<p>"How is my business doing today?"</p>
+</li>
+<li>
+<p>"What should I do next?"</p>
+</li>
+<li>
+<p>"Which customers owe me the most?"</p>
+</li>
+<li>
+<p>"Which payments are overdue?"</p>
+</li>
+<li>
+<p>"Will I have enough cash for next month's bills?"</p>
+</li>
+<li>
+<p>"Why did my expenses increase?"</p>
+</li>
+<li>
+<p>"What happens if my largest customer pays 15 days late?"</p>
+</li>
+<li>
+<p>"Compare collecting overdue invoices with taking a loan."</p>
+</li>
+<li>
+<p>"Which expenses should I review first?"</p>
+</li>
+<li>
+<p>"Explain this chart."</p>
+</li>
+</ul>
+<p>Examples in Simplified Chinese:</p>
+<ul>
+<li>
+<p>&ldquo;我的企业今天的财务状况如何？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;我接下来应该做什么？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;哪些客户欠我的钱最多？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;哪些款项已经逾期？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;下个月的账单能按时支付吗？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;为什么我的支出增加了？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;如果最大客户延迟15天付款，会有什么影响？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;比较催收欠款和申请贷款的影响。&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;哪些支出最值得优先检查？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;请解释这张图表。&rdquo;</p>
+</li>
+</ul>
+<h3>Keep AI answers short</h3>
+<p>The default response must contain three sections:</p>
+<p><strong>Problem:</strong> What needs attention?</p>
+<p><strong>Reason:</strong> What evidence supports the concern?</p>
+<p><strong>Next step:</strong> What should the user do?</p>
+<p>Keep the default answer concise, ideally around 50&ndash;100 words in English or a similarly brief Chinese response.</p>
+<p>Provide a separate <strong>"View evidence"</strong> button or expandable section.</p>
+<p>The evidence section should show relevant:</p>
+<ul>
+<li>
+<p>Transaction records.</p>
+</li>
+<li>
+<p>Invoice numbers.</p>
+</li>
+<li>
+<p>Amounts and dates.</p>
+</li>
+<li>
+<p>Reporting period.</p>
+</li>
+<li>
+<p>Calculation details.</p>
+</li>
+<li>
+<p>Forecast assumptions.</p>
+</li>
+<li>
+<p>Data source or report reference.</p>
+</li>
+</ul>
+<p>Do not overwhelm the user with technical details unless they request them.</p>
+<h3>AI behavior requirements</h3>
+<p>The assistant must:</p>
+<ol start="1">
+<li>
+<p>Use backend financial tools to retrieve the correct figures.</p>
+</li>
+<li>
+<p>Use deterministic calculation functions for financial arithmetic.</p>
+</li>
+<li>
+<p>Distinguish reported facts, user-provided facts, estimates, forecasts, and recommendations.</p>
+</li>
+<li>
+<p>Explain uncertainty and missing information.</p>
+</li>
+<li>
+<p>Never invent transactions, invoices, company disclosures, or financial-product terms.</p>
+</li>
+<li>
+<p>Ask a short clarifying question when the request cannot be answered safely.</p>
+</li>
+<li>
+<p>Respond in the user's selected language.</p>
+</li>
+<li>
+<p>Respect the selected company and organization boundaries.</p>
+</li>
+<li>
+<p>Explain financial terminology in plain language.</p>
+</li>
+<li>
+<p>Never present hypothetical scenarios as completed transactions.</p>
+</li>
+</ol>
+<p>Implement a secure server-side LLM integration using the provider supported by the existing environment.</p>
+<p>Keep API credentials in environment variables. Never expose them in frontend code.</p>
+<p>Use tool/function calling where supported. Suitable tools include:</p>
+<ul>
+<li>
+<p><code>get_today_financial_status</code></p>
+</li>
+<li>
+<p><code>get_receivables</code></p>
+</li>
+<li>
+<p><code>get_payables</code></p>
+</li>
+<li>
+<p><code>get_overdue_invoices</code></p>
+</li>
+<li>
+<p><code>get_cash_flow_forecast</code></p>
+</li>
+<li>
+<p><code>get_expense_summary</code></p>
+</li>
+<li>
+<p><code>compare_financial_actions</code></p>
+</li>
+<li>
+<p><code>get_public_company_metrics</code></p>
+</li>
+<li>
+<p><code>get_source_evidence</code></p>
+</li>
+</ul>
+<p>Validate every tool input and output. The model must not execute arbitrary SQL or directly manipulate the database.</p>
+<p>If live LLM credentials are unavailable, implement a transparent demo mode with deterministic, context-aware answers. Clearly disclose that the response is simulated. Never claim that live AI is connected if it is not.</p>
+<div><hr /></div>
+<h1>TASK 3 &mdash; REDESIGN THE DASHBOARD FOR NON-TECHNICAL BUSINESS OWNERS</h1>
+<p>The current application is too difficult to use. Make it easier for a small-business owner who does not have an accounting background.</p>
+<p>Do not remove useful financial capabilities. Improve their presentation and navigation.</p>
+<p>Prioritize plain language, fewer competing elements, progressive disclosure, and clear actions.</p>
+<h2>A. Dashboard headline: Today's financial status</h2>
+<p>Place this prominently near the top of the dashboard.</p>
+<p>English heading:</p>
+<p><strong>Today's financial status</strong></p>
+<p>Chinese heading:</p>
+<p><strong>今日财务状况</strong></p>
+<p>Show a concise overview using the available data:</p>
+<ul>
+<li>
+<p>Money available now.</p>
+</li>
+<li>
+<p>Money received today.</p>
+</li>
+<li>
+<p>Money spent today.</p>
+</li>
+<li>
+<p>Money owed to you.</p>
+</li>
+<li>
+<p>Money you owe.</p>
+</li>
+<li>
+<p>Upcoming payments.</p>
+</li>
+<li>
+<p>Important risks.</p>
+</li>
+</ul>
+<p>Use the correct reporting date and the user's local timezone.</p>
+<p>If there are no transactions for today, say so. Do not manufacture activity.</p>
+<p>Clearly distinguish the current cash balance from projected future cash.</p>
+<h2>B. Dashboard section: What should I do next?</h2>
+<p>English heading:</p>
+<p><strong>What should I do next?</strong></p>
+<p>Chinese heading:</p>
+<p><strong>接下来该做什么？</strong></p>
+<p>Create a prioritized action list with no more than three primary recommendations visible by default.</p>
+<p>Each recommendation must explain:</p>
+<ul>
+<li>
+<p>What needs attention.</p>
+</li>
+<li>
+<p>Why it matters.</p>
+</li>
+<li>
+<p>The suggested action.</p>
+</li>
+<li>
+<p>The relevant amount or due date, if available.</p>
+</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li>
+<p>Follow up on an overdue invoice.</p>
+</li>
+<li>
+<p>Review an upcoming supplier payment.</p>
+</li>
+<li>
+<p>Investigate an unusual expense.</p>
+</li>
+<li>
+<p>Check whether projected cash is sufficient for next month's bills.</p>
+</li>
+</ul>
+<p>Each recommendation must be grounded in actual records or explicitly labeled demo data.</p>
+<p>Add appropriate action buttons such as:</p>
+<ul>
+<li>
+<p>View invoice.</p>
+</li>
+<li>
+<p>Record payment.</p>
+</li>
+<li>
+<p>Review expense.</p>
+</li>
+<li>
+<p>Run cash-flow scenario.</p>
+</li>
+<li>
+<p>Ask AI.</p>
+</li>
+</ul>
+<p>Do not generate artificial urgency or generic advice unrelated to the business.</p>
+<h2>C. Replace accounting jargon with plain language</h2>
+<p>Use these labels throughout the user-facing application.</p>
+<table>
+<tbody>
+<tr>
+<th>Technical term</th>
+<th>Preferred user-facing label</th>
+<th>Chinese label</th>
+</tr>
+<tr>
+<td>Accounts Receivable</td>
+<td>Money owed to you</td>
+<td>别人欠你的钱</td>
+</tr>
+<tr>
+<td>Accounts Payable</td>
+<td>Money you owe</td>
+<td>你需要支付的钱</td>
+</tr>
+<tr>
+<td>Cash Inflow</td>
+<td>Money received</td>
+<td>收到的钱</td>
+</tr>
+<tr>
+<td>Cash Outflow</td>
+<td>Money spent</td>
+<td>支出的钱</td>
+</tr>
+<tr>
+<td>Cash-Flow Forecast</td>
+<td>Expected future cash</td>
+<td>未来现金预测</td>
+</tr>
+<tr>
+<td>Liquidity Risk</td>
+<td>Risk of running short of cash</td>
+<td>现金不足风险</td>
+</tr>
+<tr>
+<td>Working Capital</td>
+<td>Money needed to run the business</td>
+<td>经营周转资金</td>
+</tr>
+<tr>
+<td>Net Profit</td>
+<td>Money left after recorded expenses</td>
+<td>扣除已记录费用后的利润</td>
+</tr>
+</tbody>
+</table>
+<p>Important: preserve technical accuracy in detailed reports and explanations.</p>
+<p>For example, "Money left after recorded expenses" is a plain-language introduction to net profit, not a guarantee that the figure equals the cash available in the bank.</p>
+<h3>Explanation buttons</h3>
+<p>Add a small "What does this mean?" button beside important financial metrics.</p>
+<p>Chinese equivalent: &ldquo;这是什么意思？&rdquo;</p>
+<p>On click, display a short explanation, one practical example, and any important limitation.</p>
+<p>Do not show long accounting definitions by default.</p>
+<div><hr /></div>
+<h1>TASK 4 &mdash; ADD QUICK MONEY ENTRY WITH UNDO</h1>
+<p>Create two prominent dashboard actions:</p>
+<p><strong>+ Money received</strong></p>
+<p><strong>&minus; Money spent</strong></p>
+<p>Chinese labels:</p>
+<p><strong>+ 记录收款</strong></p>
+<p><strong>&minus; 记录支出</strong></p>
+<p>Make these easy to reach on desktop and especially on mobile.</p>
+<h3>Quick-entry form</h3>
+<p>For money received:</p>
+<ul>
+<li>
+<p>Amount.</p>
+</li>
+<li>
+<p>Date.</p>
+</li>
+<li>
+<p>Customer or source.</p>
+</li>
+<li>
+<p>Category.</p>
+</li>
+<li>
+<p>Payment method, if relevant.</p>
+</li>
+<li>
+<p>Optional note.</p>
+</li>
+<li>
+<p>Optional invoice association.</p>
+</li>
+</ul>
+<p>For money spent:</p>
+<ul>
+<li>
+<p>Amount.</p>
+</li>
+<li>
+<p>Date.</p>
+</li>
+<li>
+<p>Supplier or recipient.</p>
+</li>
+<li>
+<p>Category.</p>
+</li>
+<li>
+<p>Payment method, if relevant.</p>
+</li>
+<li>
+<p>Optional note.</p>
+</li>
+<li>
+<p>Optional invoice or bill association.</p>
+</li>
+</ul>
+<p>Preselect the current date and reasonable default categories.</p>
+<p>Use currency-aware input, validation, and a clear Save button.</p>
+<p>Keep the default form short. Place less frequently used fields under an optional "More details" section.</p>
+<h3>Correct financial behavior</h3>
+<p>When the user records a transaction:</p>
+<ol start="1">
+<li>
+<p>Save it to the correct business.</p>
+</li>
+<li>
+<p>Update the relevant summaries and charts.</p>
+</li>
+<li>
+<p>Update the cash-flow calculation where appropriate.</p>
+</li>
+<li>
+<p>Display a clear confirmation.</p>
+</li>
+<li>
+<p>Offer an Undo action.</p>
+</li>
+</ol>
+<p>Do not update the dashboard optimistically without handling failed saves.</p>
+<h3>Undo requirements</h3>
+<p>Provide a visible Undo option immediately after a successful entry.</p>
+<p>Implement undo through a safe, reversible application operation.</p>
+<p>Use a transaction identifier and an appropriate reversal or soft-delete mechanism. Preserve audit history where required.</p>
+<p>Do not delete an unrelated record or undo a transaction that has already been reconciled or used in a consequential operation without proper safeguards.</p>
+<p>If undo is no longer possible, explain why and provide the appropriate correction workflow.</p>
+<p>Undo should reverse the effects of the original entry without corrupting balances or historical reports.</p>
+<p>Support keyboard and screen-reader accessibility.</p>
+<div><hr /></div>
+<h1>TASK 5 &mdash; COMPARE THREE CASH-FLOW ACTIONS SIDE BY SIDE</h1>
+<p>Add a dashboard feature named:</p>
+<p><strong>Compare your options</strong></p>
+<p>Chinese:</p>
+<p><strong>比较解决方案</strong></p>
+<p>Allow the business owner to compare the following actions:</p>
+<ol start="1">
+<li>
+<p>Collect outstanding customer payments.</p>
+</li>
+<li>
+<p>Delay or renegotiate supplier payments.</p>
+</li>
+<li>
+<p>Take a business loan.</p>
+</li>
+</ol>
+<p>These must be presented in three comparable cards or columns on desktop and a clear stacked comparison on mobile.</p>
+<p>Each option should show, where sufficient data is available:</p>
+<ul>
+<li>
+<p>Immediate change in cash.</p>
+</li>
+<li>
+<p>Expected cash balance after 7, 30, and 90 days.</p>
+</li>
+<li>
+<p>Fees or financing costs.</p>
+</li>
+<li>
+<p>Repayment obligations.</p>
+</li>
+<li>
+<p>Effect on projected cash-shortage dates.</p>
+</li>
+<li>
+<p>Important risks.</p>
+</li>
+<li>
+<p>Key assumptions.</p>
+</li>
+<li>
+<p>Suggested next step.</p>
+</li>
+</ul>
+<h3>Option A: Collect outstanding payments</h3>
+<p>Use actual outstanding invoices and their amounts, due dates, and payment status.</p>
+<p>Allow the user to simulate:</p>
+<ul>
+<li>
+<p>Collecting a selected invoice.</p>
+</li>
+<li>
+<p>Collecting a percentage of outstanding receivables.</p>
+</li>
+<li>
+<p>A delay before payment arrives.</p>
+</li>
+<li>
+<p>A possible collection cost, if known.</p>
+</li>
+</ul>
+<p>Do not assume all customers will pay immediately.</p>
+<h3>Option B: Delay or renegotiate supplier payments</h3>
+<p>Use actual payable records and contractual due dates where available.</p>
+<p>Simulate a proposed revised payment date and calculate the short-term cash impact.</p>
+<p>Clearly explain that delaying payment may cause late fees, breach contractual terms, or damage supplier relationships.</p>
+<p>Do not automatically change a supplier's due date, send a message, or execute a payment.</p>
+<p>Require the user to review and confirm any actual change.</p>
+<p>Prefer the label <strong>"Renegotiate supplier payment timing"</strong> where that more accurately describes the proposed action.</p>
+<h3>Option C: Take a business loan</h3>
+<p>Use verified financing terms when available.</p>
+<p>Display:</p>
+<ul>
+<li>
+<p>Loan principal.</p>
+</li>
+<li>
+<p>Interest rate and whether it is annual or monthly.</p>
+</li>
+<li>
+<p>Fees.</p>
+</li>
+<li>
+<p>Repayment period.</p>
+</li>
+<li>
+<p>Estimated installment.</p>
+</li>
+<li>
+<p>Total repayment.</p>
+</li>
+<li>
+<p>Effect on cash flow.</p>
+</li>
+<li>
+<p>Outstanding debt after the selected period, if calculable.</p>
+</li>
+</ul>
+<p>If reliable loan terms are unavailable, use an explicitly labeled hypothetical scenario.</p>
+<p>Never imply that a loan is approved or guaranteed.</p>
+<h3>Comparison engine</h3>
+<p>Implement the financial calculations in deterministic backend functions.</p>
+<p>The system must account for the timing of cash receipts, supplier payments, and loan disbursements and repayments.</p>
+<p>Use the same starting cash balance, reporting period, and scenario assumptions for all three comparisons.</p>
+<p>Show:</p>
+<ul>
+<li>
+<p>Baseline scenario.</p>
+</li>
+<li>
+<p>Option A.</p>
+</li>
+<li>
+<p>Option B.</p>
+</li>
+<li>
+<p>Option C.</p>
+</li>
+</ul>
+<p>Add a fourth view that lets the user compare combinations of actions where appropriate.</p>
+<p>Explain the trade-offs rather than declaring a universally best option.</p>
+<p>For example, collecting receivables may be preferable to borrowing if the payments are likely to arrive soon and collection costs are low. But the system must reach that conclusion from actual inputs, not hardcoded text.</p>
+<p>If required data is missing, show what is missing and disable or qualify the affected calculation.</p>
+<p>Every scenario must be labeled <strong>Simulated &mdash; not executed</strong> until an actual authorized operation has been confirmed.</p>
+<div><hr /></div>
+<h1>TASK 6 &mdash; MOBILE-FIRST USER EXPERIENCE</h1>
+<p>Redesign the application for phone users without sacrificing desktop functionality.</p>
+<p>Do not merely shrink the desktop dashboard.</p>
+<p>Create a mobile-first layout with:</p>
+<ul>
+<li>
+<p>Compact top bar.</p>
+</li>
+<li>
+<p>Clear business and language selectors.</p>
+</li>
+<li>
+<p>Bottom navigation for the most important sections.</p>
+</li>
+<li>
+<p>Prominent Today's financial status.</p>
+</li>
+<li>
+<p>Readable financial cards.</p>
+</li>
+<li>
+<p>Quick Money received and Money spent actions.</p>
+</li>
+<li>
+<p>A visible AI assistant entry point.</p>
+</li>
+<li>
+<p>Compact, scrollable charts.</p>
+</li>
+<li>
+<p>Stacked comparison cards.</p>
+</li>
+<li>
+<p>Full-screen or near-full-screen forms.</p>
+</li>
+<li>
+<p>Large touch targets.</p>
+</li>
+<li>
+<p>Accessible text sizes.</p>
+</li>
+<li>
+<p>Clear back and close buttons.</p>
+</li>
+<li>
+<p>Safe-area padding.</p>
+</li>
+<li>
+<p>No accidental horizontal overflow.</p>
+</li>
+<li>
+<p>No hover-only functionality.</p>
+</li>
+</ul>
+<p>Suggested mobile bottom navigation:</p>
+<ol start="1">
+<li>
+<p>Home.</p>
+</li>
+<li>
+<p>Transactions.</p>
+</li>
+<li>
+<p>Cash Flow.</p>
+</li>
+<li>
+<p>AI Assistant.</p>
+</li>
+<li>
+<p>More.</p>
+</li>
+</ol>
+<p>Put secondary features under More.</p>
+<p>On desktop, retain an efficient sidebar or equivalent navigation.</p>
+<p>Make critical information available without forcing users through multiple nested menus.</p>
+<p>Test representative widths such as 360 px, 390 px, 430 px, tablet width, and desktop.</p>
+<p>All interactive controls must remain usable with touch, keyboard, and assistive technologies.</p>
+<div><hr /></div>
+<h1>TASK 7 &mdash; BILINGUAL EXPERIENCE</h1>
+<p>Preserve full English and Simplified Chinese support.</p>
+<p>Add or retain a visible EN / 中文 language selector.</p>
+<p>Translate all new elements, including:</p>
+<ul>
+<li>
+<p>Dashboard headings.</p>
+</li>
+<li>
+<p>Today's financial status.</p>
+</li>
+<li>
+<p>What should I do next?</p>
+</li>
+<li>
+<p>Money received and Money spent.</p>
+</li>
+<li>
+<p>Undo confirmations.</p>
+</li>
+<li>
+<p>AI chat.</p>
+</li>
+<li>
+<p>Evidence panels.</p>
+</li>
+<li>
+<p>Financing comparisons.</p>
+</li>
+<li>
+<p>Warnings.</p>
+</li>
+<li>
+<p>Empty states.</p>
+</li>
+<li>
+<p>Error messages.</p>
+</li>
+<li>
+<p>Forms.</p>
+</li>
+<li>
+<p>Tooltips.</p>
+</li>
+<li>
+<p>Buttons.</p>
+</li>
+<li>
+<p>Mobile navigation.</p>
+</li>
+</ul>
+<p>Use natural, professional Simplified Chinese.</p>
+<p>Do not translate financial data values incorrectly or mix languages unintentionally.</p>
+<p>Persist the language preference.</p>
+<p>Format CNY values, dates, and numbers consistently with the chosen locale.</p>
+<p>The language preference must remain separate from the reporting currency.</p>
+<div><hr /></div>
+<h1>TASK 8 &mdash; DATA MODEL AND FINANCIAL INTEGRITY</h1>
+<p>Inspect the existing data model before making changes.</p>
+<p>Reuse and extend existing entities where possible.</p>
+<p>Maintain a consistent source of truth for:</p>
+<ul>
+<li>
+<p>Businesses.</p>
+</li>
+<li>
+<p>Transactions.</p>
+</li>
+<li>
+<p>Cash balances.</p>
+</li>
+<li>
+<p>Customers.</p>
+</li>
+<li>
+<p>Suppliers.</p>
+</li>
+<li>
+<p>Invoices.</p>
+</li>
+<li>
+<p>Payables.</p>
+</li>
+<li>
+<p>Budgets.</p>
+</li>
+<li>
+<p>Forecasts.</p>
+</li>
+<li>
+<p>Financing scenarios.</p>
+</li>
+<li>
+<p>Public-company financial reports.</p>
+</li>
+<li>
+<p>Source references.</p>
+</li>
+<li>
+<p>Audit events.</p>
+</li>
+</ul>
+<p>Avoid duplicate transaction records and double-counting payments associated with invoices.</p>
+<p>Keep reported historical data separate from synthetic operational data.</p>
+<p>Use appropriate decimal arithmetic for financial calculations.</p>
+<p>Document how refunds, transfers, partial payments, cancelled invoices, and missing information affect calculations.</p>
+<p>Make financial updates transactional where necessary.</p>
+<p>Ensure that undoing a transaction updates all relevant summaries consistently.</p>
+<p>Any new database migration must preserve existing records.</p>
+<p>Do not delete working data merely to simplify the implementation.</p>
+<div><hr /></div>
+<h1>TASK 9 &mdash; SECURITY AND AI TRUST</h1>
+<p>Protect all business financial information.</p>
+<p>Implement or preserve:</p>
+<ul>
+<li>
+<p>Server-side API credentials.</p>
+</li>
+<li>
+<p>Organization-level access control.</p>
+</li>
+<li>
+<p>Input validation.</p>
+</li>
+<li>
+<p>Safe file handling.</p>
+</li>
+<li>
+<p>Audit logs.</p>
+</li>
+<li>
+<p>Appropriate authentication and session security.</p>
+</li>
+<li>
+<p>Protection against unauthorized record access.</p>
+</li>
+<li>
+<p>Secure error handling.</p>
+</li>
+<li>
+<p>Rate limits for sensitive endpoints where practical.</p>
+</li>
+</ul>
+<p>Never let the LLM directly change financial records without validated, authorized application operations.</p>
+<p>Require confirmation before consequential changes.</p>
+<p>Show a clear reason for each important AI recommendation.</p>
+<p>Treat imported reports, transaction descriptions, and uploaded documents as untrusted content.</p>
+<p>Do not let instructions embedded in documents override application security rules.</p>
+<p>Do not connect to real banking or payment systems unless the required authorized integration already exists.</p>
+<div><hr /></div>
+<h1>TASK 10 &mdash; TESTING AND ACCEPTANCE CRITERIA</h1>
+<p>Do not stop when the UI looks attractive.</p>
+<p>Test the complete workflows.</p>
+<h3>Real data</h3>
+<ul>
+<li><input type="text" />
+<div>
+<p>Company names and financial figures are verified.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Official source links work.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Reporting periods and units are correct.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Annual-report data is separated from SME transaction data.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>No unsupported live balances are displayed.</p>
+</div>
+</li>
+</ul>
+<h3>Dashboard</h3>
+<ul>
+<li><input type="text" />
+<div>
+<p>Today's financial status uses the correct date.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Money received and Money spent reflect actual recorded transactions.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Money owed to you and Money you owe are correctly calculated.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>What should I do next? uses relevant records.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Explanation buttons work.</p>
+</div>
+</li>
+</ul>
+<h3>Quick entry</h3>
+<ul>
+<li><input type="text" />
+<div>
+<p>Users can record money received.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Users can record money spent.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Invalid amounts are rejected.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Saved records update all dependent views.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Undo safely reverses eligible entries.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Audit history remains consistent.</p>
+</div>
+</li>
+</ul>
+<h3>AI</h3>
+<ul>
+<li><input type="text" />
+<div>
+<p>Questions use the correct business context.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Answers are concise.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Evidence is available separately.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Financial arithmetic is performed by validated functions.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Missing information is disclosed.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>English and Chinese both work.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Demo mode is clearly labeled if live AI is unavailable.</p>
+</div>
+</li>
+</ul>
+<h3>Scenario comparison</h3>
+<ul>
+<li><input type="text" />
+<div>
+<p>Collecting payments changes projected cash correctly.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Supplier-payment changes respect the chosen scenario dates.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Loan scenarios include repayment obligations.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>All scenarios use the same baseline assumptions.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Missing financing terms are disclosed.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Scenarios are not presented as executed transactions.</p>
+</div>
+</li>
+</ul>
+<h3>Mobile</h3>
+<ul>
+<li><input type="text" />
+<div>
+<p>No horizontal overflow at tested widths.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>All important actions are touch-friendly.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Forms fit on small screens.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Bottom navigation works.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>AI chat is usable on mobile.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Charts and comparison cards remain readable.</p>
+</div>
+</li>
+</ul>
+<h3>Final technical checks</h3>
+<p>Run the available lint, type-check, build, and test commands.</p>
+<p>Fix the errors you discover.</p>
+<p>Do not claim a test passed unless it was actually executed.</p>
+<div><hr /></div>
+<h1>EXECUTION INSTRUCTIONS</h1>
+<p>Work in the following order:</p>
+<p><strong>Phase 1:</strong> Inspect the existing application and identify its framework, routes, components, data sources, and current limitations.</p>
+<p><strong>Phase 2:</strong> Research and verify official Chinese company financial reports. Implement the source-backed Public Company Benchmark without misrepresenting annual data as live SME finances.</p>
+<p><strong>Phase 3:</strong> Redesign the dashboard with Today's financial status, What should I do next?, plain-language financial labels, and explanation buttons.</p>
+<p><strong>Phase 4:</strong> Implement Money received, Money spent, persistent transaction storage, and safe Undo.</p>
+<p><strong>Phase 5:</strong> Integrate the context-aware AI copilot with short answers and separate evidence panels.</p>
+<p><strong>Phase 6:</strong> Implement the side-by-side comparison of collecting payments, renegotiating supplier payments, and taking a loan.</p>
+<p><strong>Phase 7:</strong> Complete mobile-first layouts and test English and Simplified Chinese throughout.</p>
+<p><strong>Phase 8:</strong> Run the complete test suite, fix issues, and verify the key user journeys.</p>
+<p><strong>Phase 9:</strong> Provide a handover report documenting changes, data sources, AI configuration, setup instructions, test results, and known limitations.</p>
+<p>Do not stop after producing the plan. Continue implementing the changes in the available workspace.</p>
+<p>If you encounter an access limitation, report it precisely and continue with any work that can be completed safely.</p>
+<p>Do not claim the public website has been updated unless the deployment was actually completed and verified.</p>
+<h1>DEFINITION OF SUCCESS</h1>
+<p>The updated Finora should allow a Chinese small-business owner to open the dashboard on a phone, understand today's financial position in seconds, record money received or spent in a few taps, undo a mistaken entry, ask the AI a financial question, inspect the supporting evidence, and compare three possible ways to improve cash flow.</p>
+<p>It should also provide a separate, trustworthy view of real Chinese company financial reports, with official sources and clearly labeled reporting periods.</p>
+<p><strong>Prioritize clarity, trust, and practical financial decisions. Make the existing application genuinely easier to use, not merely more visually impressive.</strong></p>

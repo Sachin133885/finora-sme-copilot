@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {seed,summary,forecast} from '../src/engine.js';
+const m=await import('../src/readiness.js').catch(()=>({}));
+assert.equal(typeof m.reconcileStatement,'function','reconciliation review is missing');
+const csv='id,date,type,category,party,amount,description\na,2026-10-12,income,sales,Customer,100.00,Sale\nb,2026-10-12,income,other,My bank,100.00,withdrawal to own bank\nc,2026-10-12,expense,other,Customer,20.00,refund\n';
+let d=seed('shenzhen'),p=m.reconcileStatement(csv,d,'generic');assert.equal(p.records.length,1);assert.equal(p.review.length,2);assert.equal(p.review[0].reason,'own_transfer');
+let n=m.commitReconciliation(d,p,{});assert.equal(summary(n).cash,summary(d).cash+10000);assert.equal(n.importBatches[0].unresolved,2);assert.equal(m.forecastQuality(n).unresolved,2);
+let r=m.resolveImportReview(n,n.importBatches[0].id,p.review[0].id,'exclude');assert.equal(summary(r).cash,summary(n).cash);assert.equal(m.forecastQuality(r).unresolved,1);
+r=m.resolveImportReview(r,r.importBatches[0].id,p.review[1].id,'refund_out');assert.equal(summary(r).cash,summary(n).cash-2000);assert.equal(m.forecastQuality(r).unresolved,0);assert.throws(()=>m.resolveImportReview(r,r.importBatches[0].id,p.review[1].id,'refund_out'));
+assert.equal(m.reconcileStatement(csv,r,'generic').records.length,0,'same import must be idempotent');
+const cross=m.reconcileStatement('id,date,type,category,party,amount,description\nx,2026-10-12,income,sales,Customer,100.00,Sale',r,'bank');assert.equal(cross.records.length,0);assert.equal(cross.review[0].reason,'possible_duplicate');
+const tasks=m.suggestPlan(d);assert.ok(tasks.length);let planned=m.addPlanTask(d,tasks[0]);const before=summary(planned).cash,base=forecast(planned).min.cash;planned=m.updatePlanTask(planned,planned.actionPlan[0].id,{status:'contacted',note:'Called'});assert.equal(summary(planned).cash,before);assert.equal(forecast(planned).min.cash,base);assert.throws(()=>m.updatePlanTask(planned,planned.actionPlan[0].id,{status:'settled'}));
+assert.equal(m.forecastQuality(d).snapshot,'2026-10-13');assert.equal(m.forecastQuality(d).probability,null);assert.equal(m.forecastQuality(d).scenarios.length,3);
+const doc={amount:'1.00',linkedId:d.invoices[0].id,seller:d.invoices[0].party,date:'2026-10-12'};assert.equal(m.matchEvidence(d,doc).status,'mismatch');assert.equal(m.matchEvidence(d,{...doc,linkedId:'missing'}).status,'unmatched');
+const c=m.conversationContext('What if I hire 2 people?',[]);assert.equal(c.needsPayroll,true);const c2=m.conversationContext('Only one instead',[{question:'hire two',scenario:{hiring:1200000,days:30}}]);assert.equal(c2.proposed.hiring,600000);assert.equal(c2.requiresReview,true);
+console.log('PASS reconciliation, refunds, transfer exclusion, duplicates, persistent review, plans, quality, evidence and follow-up checks');

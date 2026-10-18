@@ -1,0 +1,29 @@
+{
+  "app": "Finora",
+  "competition_topic": "Topic E — SME Finance Copilot",
+  "prepared_date": "2026-10-18",
+  "source_commit": "522435c6b9b48fdc3f6b5622a2eb02b4b8993f7a",
+  "site_version": 10,
+  "public_app_url": "https://finora-sme-copilot.bravehare4.chatgpt.site/",
+  "intended_github_owner": "sachin133885",
+  "github_repository_url": null,
+  "github_publication_status": "pending authorized target repository",
+  "application_source_modified": false,
+  "added_material": [
+    "README replacement; original retained as docs/development-history.md",
+    ".gitignore",
+    ".github/workflows/tests.yml",
+    "docs/DEPLOYMENT.md",
+    "docs/GITHUB-HANDOFF.md",
+    "docs/VERIFICATION.md",
+    "SUBMISSION.json",
+    "SHA256SUMS.txt"
+  ],
+  "tests": {
+    "suites_passed": 26,
+    "suites_total": 26,
+    "worker_validation": "passed",
+    "real_browser_check": false,
+    "fresh_live_ai_verified": false
+  }
+}

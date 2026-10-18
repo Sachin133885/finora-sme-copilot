@@ -1,0 +1,1645 @@
+<h1>MASTER BUILD PROMPT &mdash; FINORA 融财</h1>
+<h2>AI-Powered SME Finance Copilot for the Chinese Market</h2>
+<p>You are acting as a senior fintech product architect, full-stack software engineer, AI/LLM engineer, financial data analyst, UX/UI designer, security engineer, and hackathon mentor.</p>
+<p>Your mission is to design, implement, test, and polish a working, competition-ready fintech web application called <strong>Finora 融财</strong> for the <strong>2026 Shenzhen International FinTech Competition &mdash; International Track, Topic E: SME Finance Copilot</strong>.</p>
+<p>Do not merely give me ideas, a specification, a tutorial, or a static UI mockup. Inspect the current workspace, establish a development plan, implement the application, run it, test it, and fix errors.</p>
+<p>The application must be bilingual in English and Simplified Chinese, visually exceptional, AI-powered, practical for Chinese small and medium-sized enterprises (SMEs), and suitable for a live demonstration to fintech judges.</p>
+<div><hr /></div>
+<h1>1. PRODUCT IDENTITY</h1>
+<p><strong>English name:</strong> Finora<br /><strong>Chinese name:</strong> 融财<br /><strong>Pronunciation:</strong> R&oacute;ng C&aacute;i<br /><strong>Product category:</strong> AI SME Finance Copilot<br /><strong>Primary tagline:</strong> Smarter Cash Flow. Stronger Businesses.<br /><strong>Chinese tagline:</strong> 智慧管现金流，助力企业成长。</p>
+<h3>Product vision</h3>
+<p>Build a trustworthy AI financial copilot that helps small-business owners understand their finances, anticipate cash shortages, manage invoices and payments, identify business risks, and explore suitable financing options.</p>
+<p>The application should transform business financial data into understandable insights and actionable recommendations.</p>
+<p>It must go beyond traditional accounting software. Its defining feature is a conversational AI copilot connected to the user's financial data and analytical tools.</p>
+<h3>Target users</h3>
+<p>Prioritize these Chinese SME segments:</p>
+<ol start="1">
+<li>
+<p>Small retailers and local shops.</p>
+</li>
+<li>
+<p>E-commerce sellers and online merchants.</p>
+</li>
+<li>
+<p>Small manufacturing and trading businesses.</p>
+</li>
+<li>
+<p>Freelancers, agencies, and service businesses.</p>
+</li>
+<li>
+<p>Small restaurants and hospitality businesses.</p>
+</li>
+<li>
+<p>Growing businesses that need financing or working-capital support.</p>
+</li>
+</ol>
+<p>Primary users are business owners, founders, finance managers, and accountants.</p>
+<h3>Main value proposition</h3>
+<p>"Understand your business finances, predict what comes next, and make better decisions with an AI copilot."</p>
+<p>Design for real business needs rather than building features merely to make the application look complex.</p>
+<div><hr /></div>
+<h1>2. IMPORTANT REFERENCE DOCUMENT</h1>
+<p>I have provided a PDF named <code>Wallet Agent for Chinese Users.pdf</code>.</p>
+<p>Read the complete PDF before implementation. It contains relevant design inspiration, but it describes a consumer-oriented wallet agent rather than our selected SME Finance Copilot topic.</p>
+<p>Extract and adapt the following ideas:</p>
+<ul>
+<li>
+<p>Financial risk alerts and suspicious-transaction warnings.</p>
+</li>
+<li>
+<p>Explainable recommendations with a clear reason for each suggestion.</p>
+</li>
+<li>
+<p>Permission tiers for automated actions.</p>
+</li>
+<li>
+<p>Human confirmation for sensitive or high-risk actions.</p>
+</li>
+<li>
+<p>Financial-data minimization and privacy.</p>
+</li>
+<li>
+<p>Clear distinctions between recommendations and executed actions.</p>
+</li>
+<li>
+<p>Risk-aware financial assistance.</p>
+</li>
+</ul>
+<p>Do not copy its consumer-wallet product scope.</p>
+<p>Do not make the application primarily about personal savings, consumer credit, retirement planning, gold purchases, crypto wallets, or autonomous consumer payments.</p>
+<p>Instead, translate these principles into SME workflows:</p>
+<ul>
+<li>
+<p>Business cash-flow monitoring.</p>
+</li>
+<li>
+<p>Accounts receivable and payable.</p>
+</li>
+<li>
+<p>Invoice management.</p>
+</li>
+<li>
+<p>Expense analysis.</p>
+</li>
+<li>
+<p>Revenue and expense forecasting.</p>
+</li>
+<li>
+<p>Cash-shortage warnings.</p>
+</li>
+<li>
+<p>Business financial health.</p>
+</li>
+<li>
+<p>Financing-option comparisons.</p>
+</li>
+<li>
+<p>Fraud and anomaly alerts.</p>
+</li>
+<li>
+<p>Controlled, auditable AI-assisted actions.</p>
+</li>
+</ul>
+<p>Read the PDF from beginning to end and use it as a design reference throughout the project.</p>
+<p>If the original workspace already contains code, inspect it and preserve useful components. Avoid destructive rewrites without justification.</p>
+<div><hr /></div>
+<h1>3. PRODUCT REQUIREMENTS</h1>
+<p>Build a real, functional web application with the following core modules.</p>
+<h2>Module A: Executive Financial Dashboard</h2>
+<p>Create an elegant business dashboard that provides an immediate overview of the company's financial position.</p>
+<p>Display:</p>
+<ul>
+<li>
+<p>Total revenue.</p>
+</li>
+<li>
+<p>Total operating expenses.</p>
+</li>
+<li>
+<p>Net profit.</p>
+</li>
+<li>
+<p>Current cash balance.</p>
+</li>
+<li>
+<p>Accounts receivable.</p>
+</li>
+<li>
+<p>Accounts payable.</p>
+</li>
+<li>
+<p>Cash runway estimate.</p>
+</li>
+<li>
+<p>Cash-flow forecast.</p>
+</li>
+<li>
+<p>Revenue and expense trends.</p>
+</li>
+<li>
+<p>Overdue invoices.</p>
+</li>
+<li>
+<p>Upcoming bills.</p>
+</li>
+<li>
+<p>Financial risk alerts.</p>
+</li>
+<li>
+<p>AI-generated business insights.</p>
+</li>
+</ul>
+<p>Include:</p>
+<ol start="1">
+<li>
+<p>Comparison with the previous period.</p>
+</li>
+<li>
+<p>Selectable periods such as 7 days, 30 days, 90 days, and custom dates.</p>
+</li>
+<li>
+<p>Clear visual distinction between positive, negative, and neutral changes.</p>
+</li>
+<li>
+<p>Interactive charts with tooltips.</p>
+</li>
+<li>
+<p>Clickable summary cards that open relevant details.</p>
+</li>
+<li>
+<p>A prioritized list of recommended actions.</p>
+</li>
+</ol>
+<p>Never invent financial metrics silently. All metrics must come from actual application data, seeded demonstration data, or explicitly labeled estimates.</p>
+<p>If no financial data exists, display a useful onboarding experience instead of misleading zero-filled financial reports.</p>
+<h2>Module B: AI Finance Copilot</h2>
+<p>This is the most important feature of the product.</p>
+<p>Build a persistent AI chat interface that lets business owners ask questions in natural language.</p>
+<p>Example English questions:</p>
+<ul>
+<li>
+<p>"Can my business afford to hire two employees next month?"</p>
+</li>
+<li>
+<p>"Why did my expenses increase this month?"</p>
+</li>
+<li>
+<p>"Which customers owe me the most money?"</p>
+</li>
+<li>
+<p>"Will I run out of cash in the next 30 days?"</p>
+</li>
+<li>
+<p>"Which expenses should I investigate first?"</p>
+</li>
+<li>
+<p>"What happens if my revenue decreases by 15%?"</p>
+</li>
+<li>
+<p>"Which invoices should I follow up on today?"</p>
+</li>
+<li>
+<p>"How much working capital might my business need?"</p>
+</li>
+<li>
+<p>"Compare this quarter with the previous quarter."</p>
+</li>
+<li>
+<p>"Explain my financial situation in simple language."</p>
+</li>
+</ul>
+<p>Example Simplified Chinese questions:</p>
+<ul>
+<li>
+<p>&ldquo;我的企业下个月能负担新增两名员工的工资吗？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;为什么本月支出增加了？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;哪些客户欠款最多？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;未来30天我的企业会出现现金短缺吗？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;哪些支出最值得优先核查？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;如果收入下降15%，会有什么影响？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;今天应该优先跟进哪些发票？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;我的企业可能需要多少营运资金？&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;比较本季度与上一季度的财务表现。&rdquo;</p>
+</li>
+<li>
+<p>&ldquo;请用简单的语言解释我的企业财务状况。&rdquo;</p>
+</li>
+</ul>
+<h3>AI requirements</h3>
+<p>The AI must:</p>
+<ol start="1">
+<li>
+<p>Understand English and Simplified Chinese.</p>
+</li>
+<li>
+<p>Answer in the user's selected language.</p>
+</li>
+<li>
+<p>Use the current business's financial data.</p>
+</li>
+<li>
+<p>Call appropriate application functions or analytical tools when needed.</p>
+</li>
+<li>
+<p>Perform calculations through deterministic backend functions rather than relying on unsupported mental arithmetic.</p>
+</li>
+<li>
+<p>Explain important numbers and assumptions.</p>
+</li>
+<li>
+<p>Cite relevant transaction records, invoices, dates, or report periods when available.</p>
+</li>
+<li>
+<p>Distinguish facts, estimates, forecasts, and recommendations.</p>
+</li>
+<li>
+<p>Ask clarifying questions when necessary data is missing.</p>
+</li>
+<li>
+<p>Avoid fabricated transactions, balances, financial products, or financing offers.</p>
+</li>
+<li>
+<p>Offer follow-up actions relevant to the question.</p>
+</li>
+<li>
+<p>Maintain conversation context while respecting business-account boundaries.</p>
+</li>
+</ol>
+<h3>AI response design</h3>
+<p>For financial questions, use structured responses where appropriate:</p>
+<ul>
+<li>
+<p>Direct answer.</p>
+</li>
+<li>
+<p>Supporting figures.</p>
+</li>
+<li>
+<p>Relevant evidence.</p>
+</li>
+<li>
+<p>Explanation.</p>
+</li>
+<li>
+<p>Risk or uncertainty.</p>
+</li>
+<li>
+<p>Recommended next step.</p>
+</li>
+</ul>
+<p>For example, when asked about a potential cash shortage, the AI should identify the projected date, estimated shortfall, expected receivables, upcoming payments, and assumptions.</p>
+<p>It must not simply generate a generic paragraph.</p>
+<h3>AI implementation</h3>
+<p>Use a real LLM API through a secure server-side integration.</p>
+<p>Choose an appropriate provider supported by the environment. Keep the provider configurable through environment variables and a clean adapter interface.</p>
+<p>Never expose API keys in browser code.</p>
+<p>Use tool/function calling where supported. Define tools such as:</p>
+<ul>
+<li>
+<p><code>get_financial_summary</code></p>
+</li>
+<li>
+<p><code>get_cash_flow_forecast</code></p>
+</li>
+<li>
+<p><code>get_overdue_invoices</code></p>
+</li>
+<li>
+<p><code>get_expense_breakdown</code></p>
+</li>
+<li>
+<p><code>compare_financial_periods</code></p>
+</li>
+<li>
+<p><code>run_cash_flow_scenario</code></p>
+</li>
+<li>
+<p><code>get_financial_risks</code></p>
+</li>
+<li>
+<p><code>search_business_transactions</code></p>
+</li>
+<li>
+<p><code>get_financing_options</code></p>
+</li>
+</ul>
+<p>Validate tool inputs, enforce user permissions, and validate tool outputs.</p>
+<p>Do not let the LLM directly modify financial records or execute arbitrary SQL.</p>
+<p>If an API key is unavailable, implement a transparent demo mode using deterministic financial analytics and clearly labeled simulated AI responses. The interface must distinguish demo mode from live LLM integration. Do not pretend that a live AI service is connected when it is not.</p>
+<h2>Module C: Cash-Flow Management and Forecasting</h2>
+<p>Create a dedicated cash-flow workspace.</p>
+<p>Features:</p>
+<ul>
+<li>
+<p>Historical cash inflows and outflows.</p>
+</li>
+<li>
+<p>Daily, weekly, and monthly views.</p>
+</li>
+<li>
+<p>Expected customer payments.</p>
+</li>
+<li>
+<p>Upcoming supplier payments.</p>
+</li>
+<li>
+<p>Recurring operating costs.</p>
+</li>
+<li>
+<p>Projected closing cash balance.</p>
+</li>
+<li>
+<p>Estimated cash-shortage dates.</p>
+</li>
+<li>
+<p>Cash-flow forecasting for 30, 60, and 90 days.</p>
+</li>
+<li>
+<p>Best-case, base-case, and stress-case scenarios.</p>
+</li>
+<li>
+<p>Interactive forecast charts.</p>
+</li>
+<li>
+<p>Explanation of the factors influencing each forecast.</p>
+</li>
+</ul>
+<h3>Forecasting logic</h3>
+<p>Start with a transparent, reliable baseline using historical transactions, scheduled receivables, scheduled payables, and opening cash balance.</p>
+<p>Use this fundamental relationship:</p>
+<p>Closing cash = Opening cash + Cash inflows &minus; Cash outflows.</p>
+<p>Forecasts should account for timing, not just aggregate totals.</p>
+<p>If historical data is insufficient, explicitly label the forecast as provisional and explain why.</p>
+<p>Do not fabricate a sophisticated machine-learning model. A deterministic baseline is acceptable for the MVP; an optional forecasting model may be added if there is enough data to validate it.</p>
+<h3>Scenario simulator</h3>
+<p>Let users change assumptions such as:</p>
+<ul>
+<li>
+<p>Revenue growth or decline.</p>
+</li>
+<li>
+<p>Expected customer-payment delays.</p>
+</li>
+<li>
+<p>Expense increases.</p>
+</li>
+<li>
+<p>Supplier-payment timing.</p>
+</li>
+<li>
+<p>Hiring costs.</p>
+</li>
+<li>
+<p>A proposed new business expense.</p>
+</li>
+</ul>
+<p>Immediately recalculate the scenario and visualize the effect on future cash balances.</p>
+<p>Show which assumptions were changed and how they affected the outcome.</p>
+<h2>Module D: Invoice and Payment Management</h2>
+<p>Implement a usable invoice-management module.</p>
+<p>Features:</p>
+<ul>
+<li>
+<p>Create and edit invoices.</p>
+</li>
+<li>
+<p>Add customers and suppliers.</p>
+</li>
+<li>
+<p>Invoice number, issue date, due date, amount, tax, and status.</p>
+</li>
+<li>
+<p>Mark invoices as paid, partially paid, overdue, or pending.</p>
+</li>
+<li>
+<p>Track accounts receivable and accounts payable separately.</p>
+</li>
+<li>
+<p>Search and filter by customer, date, amount, and status.</p>
+</li>
+<li>
+<p>Invoice detail pages.</p>
+</li>
+<li>
+<p>Payment reminders.</p>
+</li>
+<li>
+<p>Upcoming-payment calendar.</p>
+</li>
+<li>
+<p>Export invoice records.</p>
+</li>
+<li>
+<p>Basic invoice-document upload and extraction where practical.</p>
+</li>
+</ul>
+<p>Provide an invoice creation form with validation and automatic totals.</p>
+<p>Use sample customers and suppliers for the initial demonstration.</p>
+<p>Do not claim that an invoice has been paid or that a payment has been sent unless a real, authorized integration confirms it.</p>
+<h2>Module E: Expense Intelligence</h2>
+<p>Build an expense-analysis workspace.</p>
+<p>Features:</p>
+<ul>
+<li>
+<p>Expense categorization.</p>
+</li>
+<li>
+<p>Category-level spending charts.</p>
+</li>
+<li>
+<p>Merchant and supplier analysis.</p>
+</li>
+<li>
+<p>Month-over-month expense comparisons.</p>
+</li>
+<li>
+<p>Recurring-expense detection.</p>
+</li>
+<li>
+<p>Unusual expense detection.</p>
+</li>
+<li>
+<p>Duplicate-transaction warnings.</p>
+</li>
+<li>
+<p>Budget-versus-actual comparisons.</p>
+</li>
+<li>
+<p>High-cost category alerts.</p>
+</li>
+<li>
+<p>Suggested cost-control opportunities.</p>
+</li>
+</ul>
+<p>Provide understandable explanations for anomalies.</p>
+<p>For example:</p>
+<p>"Office supply expenses are 32% higher than the previous month. Review the three largest transactions."</p>
+<p>The example is illustrative. Actual percentages and transaction counts must be calculated from application data.</p>
+<p>Never label a transaction fraudulent based only on an unusual amount. Use cautious language such as "requires review" or "potential anomaly."</p>
+<h2>Module F: SME Financing Assistant</h2>
+<p>This module is important because the competition topic explicitly includes financing and cash-flow support.</p>
+<p>Help businesses understand potential financing needs and compare available financing options.</p>
+<p>Features:</p>
+<ul>
+<li>
+<p>Estimate working-capital requirements.</p>
+</li>
+<li>
+<p>Explain the purpose of short-term financing.</p>
+</li>
+<li>
+<p>Compare financing products using transparent criteria.</p>
+</li>
+<li>
+<p>Display interest rates, fees, repayment periods, eligibility criteria, and total repayment when reliable data is available.</p>
+</li>
+<li>
+<p>Explain the effect of repayment obligations on projected cash flow.</p>
+</li>
+<li>
+<p>Compare scenarios with and without proposed financing.</p>
+</li>
+<li>
+<p>Provide a financing-readiness checklist.</p>
+</li>
+<li>
+<p>Identify missing business documents.</p>
+</li>
+<li>
+<p>Explain the trade-offs between financing alternatives.</p>
+</li>
+</ul>
+<h3>Financing integrity rules</h3>
+<p>Do not invent banks, lenders, current rates, loan approvals, or eligibility guarantees.</p>
+<p>If verified financing-product data is unavailable, provide a clearly labeled illustrative comparison using hypothetical products.</p>
+<p>Display the data source and last-updated date whenever available.</p>
+<p>The application must not imply a partnership with WeBank, Alipay, WeChat Pay, or any other financial institution unless one has actually been established.</p>
+<p>Do not make automated lending decisions or guarantee access to credit.</p>
+<p>The AI should support the business owner's decision, not replace the lender's formal underwriting process.</p>
+<h2>Module G: Business Risk and Financial Alerts</h2>
+<p>Create a centralized risk center.</p>
+<p>Detect and explain:</p>
+<ul>
+<li>
+<p>Low projected cash balance.</p>
+</li>
+<li>
+<p>Overdue customer invoices.</p>
+</li>
+<li>
+<p>Concentration of receivables in a small number of customers.</p>
+</li>
+<li>
+<p>Unusual expense spikes.</p>
+</li>
+<li>
+<p>Duplicate transactions.</p>
+</li>
+<li>
+<p>Upcoming large payments.</p>
+</li>
+<li>
+<p>Recurring expenses that may require review.</p>
+</li>
+<li>
+<p>Potential cash-flow pressure from repayment obligations.</p>
+</li>
+<li>
+<p>Missing or inconsistent financial records.</p>
+</li>
+</ul>
+<p>Each alert should include:</p>
+<ul>
+<li>
+<p>Severity.</p>
+</li>
+<li>
+<p>Date.</p>
+</li>
+<li>
+<p>Supporting evidence.</p>
+</li>
+<li>
+<p>Explanation.</p>
+</li>
+<li>
+<p>Potential business impact.</p>
+</li>
+<li>
+<p>Recommended action.</p>
+</li>
+<li>
+<p>Dismiss or mark-as-reviewed functionality.</p>
+</li>
+</ul>
+<p>Use a clear priority system: Critical, High, Medium, and Low.</p>
+<p>Do not create fake urgent alerts merely to make the dashboard look impressive.</p>
+<h2>Module H: Data Import and Business Setup</h2>
+<p>Create a guided onboarding process.</p>
+<p>Ask for:</p>
+<ul>
+<li>
+<p>Business name.</p>
+</li>
+<li>
+<p>Industry.</p>
+</li>
+<li>
+<p>Business size.</p>
+</li>
+<li>
+<p>Preferred language.</p>
+</li>
+<li>
+<p>Reporting currency.</p>
+</li>
+<li>
+<p>Fiscal-period preference.</p>
+</li>
+<li>
+<p>Opening cash balance.</p>
+</li>
+<li>
+<p>Available financial records.</p>
+</li>
+</ul>
+<p>Allow users to:</p>
+<ul>
+<li>
+<p>Start with demonstration data.</p>
+</li>
+<li>
+<p>Import CSV transaction records.</p>
+</li>
+<li>
+<p>Download a sample CSV template.</p>
+</li>
+<li>
+<p>Review imported records before saving.</p>
+</li>
+<li>
+<p>Correct invalid rows.</p>
+</li>
+<li>
+<p>Detect duplicate imports.</p>
+</li>
+<li>
+<p>Map source columns to application fields.</p>
+</li>
+<li>
+<p>View an import summary.</p>
+</li>
+</ul>
+<p>Where feasible, support invoice PDF uploads and structured extraction.</p>
+<p>Validate uploaded files, restrict file size and types, and never execute uploaded content.</p>
+<p>Use synthetic demonstration data by default. Never require real bank credentials for the demo.</p>
+<div><hr /></div>
+<h1>4. BILINGUAL EXPERIENCE: ENGLISH + SIMPLIFIED CHINESE</h1>
+<p>The entire application must support both English and Simplified Chinese.</p>
+<p>This is a core product requirement, not an optional translation feature.</p>
+<h3>Language behavior</h3>
+<ul>
+<li>
+<p>Default language: English.</p>
+</li>
+<li>
+<p>Secondary language: Simplified Chinese (<code>zh-CN</code>).</p>
+</li>
+<li>
+<p>Add a visible EN / 中文 language selector.</p>
+</li>
+<li>
+<p>Persist the selected language across navigation and reloads.</p>
+</li>
+<li>
+<p>Translate navigation, page titles, buttons, forms, charts, empty states, notifications, tooltips, onboarding, validation errors, AI suggestions, and system messages.</p>
+</li>
+<li>
+<p>Keep financial terminology accurate and consistent.</p>
+</li>
+<li>
+<p>Avoid mixing English and Chinese in the same UI unless a proper name or technical term requires it.</p>
+</li>
+<li>
+<p>Use natural, professional Simplified Chinese rather than awkward word-for-word translations.</p>
+</li>
+<li>
+<p>Use locale-aware date, number, and currency formatting.</p>
+</li>
+<li>
+<p>Use an appropriate Chinese-capable font stack, such as Inter for Latin text and Noto Sans SC or a suitable system Chinese font.</p>
+</li>
+<li>
+<p>Ensure the layout accommodates Chinese characters without clipping.</p>
+</li>
+</ul>
+<h3>Financial localization</h3>
+<p>Support CNY/RMB as the default currency.</p>
+<p>Display Chinese currency amounts consistently, for example:</p>
+<ul>
+<li>
+<p>English: <code>&yen;125,800.00</code></p>
+</li>
+<li>
+<p>Chinese: <code>&yen;125,800.00</code></p>
+</li>
+</ul>
+<p>Use Chinese locale formatting where appropriate, and support other currencies through configurable currency metadata.</p>
+<p>Do not confuse language selection with currency selection. They are separate settings.</p>
+<p>The application should feel designed for Chinese businesses rather than an English application with a translation toggle.</p>
+<div><hr /></div>
+<h1>5. UI/UX DESIGN SYSTEM</h1>
+<p>Create a premium fintech interface that looks like a serious, modern financial SaaS product.</p>
+<p>The design must be polished enough for a competition presentation and credible enough to attract real business owners.</p>
+<h3>Visual direction</h3>
+<p>Use a combination of:</p>
+<ul>
+<li>
+<p>Deep midnight navy for navigation and important structural elements.</p>
+</li>
+<li>
+<p>Emerald or jade green for positive financial performance.</p>
+</li>
+<li>
+<p>Bright teal for primary actions and data highlights.</p>
+</li>
+<li>
+<p>Warm off-white or very light gray for the main workspace.</p>
+</li>
+<li>
+<p>White cards with subtle borders and soft shadows.</p>
+</li>
+<li>
+<p>Carefully controlled amber and red for warnings and negative financial indicators.</p>
+</li>
+</ul>
+<p>Suggested palette:</p>
+<ul>
+<li>
+<p>Primary navy: <code>#10243A</code></p>
+</li>
+<li>
+<p>Secondary navy: <code>#183B56</code></p>
+</li>
+<li>
+<p>Teal: <code>#0F9D92</code></p>
+</li>
+<li>
+<p>Jade: <code>#16A085</code></p>
+</li>
+<li>
+<p>Positive: <code>#15803D</code></p>
+</li>
+<li>
+<p>Warning: <code>#D97706</code></p>
+</li>
+<li>
+<p>Critical: <code>#DC2626</code></p>
+</li>
+<li>
+<p>Workspace background: <code>#F5F7FA</code></p>
+</li>
+<li>
+<p>Card background: <code>#FFFFFF</code></p>
+</li>
+<li>
+<p>Main text: <code>#172B3A</code></p>
+</li>
+<li>
+<p>Secondary text: <code>#64748B</code></p>
+</li>
+</ul>
+<p>Treat these as starting values. Establish consistent semantic design tokens and accessible contrast.</p>
+<p>Do not make the UI excessively colorful, cluttered, cartoonish, or dependent on gradients.</p>
+<h3>Layout</h3>
+<p>Build a responsive desktop-first financial workspace that also works well on tablets and mobile devices.</p>
+<p>Recommended desktop layout:</p>
+<p><strong>Left sidebar</strong></p>
+<ul>
+<li>
+<p>Overview</p>
+</li>
+<li>
+<p>Cash Flow</p>
+</li>
+<li>
+<p>Invoices</p>
+</li>
+<li>
+<p>Expenses</p>
+</li>
+<li>
+<p>Financing</p>
+</li>
+<li>
+<p>Risk Center</p>
+</li>
+<li>
+<p>Reports</p>
+</li>
+<li>
+<p>AI Copilot</p>
+</li>
+<li>
+<p>Settings</p>
+</li>
+</ul>
+<p><strong>Top bar</strong></p>
+<ul>
+<li>
+<p>Current business selector.</p>
+</li>
+<li>
+<p>Search.</p>
+</li>
+<li>
+<p>Date range.</p>
+</li>
+<li>
+<p>Notifications.</p>
+</li>
+<li>
+<p>Language switcher.</p>
+</li>
+<li>
+<p>User profile.</p>
+</li>
+</ul>
+<p><strong>Main dashboard</strong></p>
+<ul>
+<li>
+<p>Financial KPI cards.</p>
+</li>
+<li>
+<p>Cash-flow chart.</p>
+</li>
+<li>
+<p>Revenue-versus-expense chart.</p>
+</li>
+<li>
+<p>Receivables and payables summary.</p>
+</li>
+<li>
+<p>Risk alerts.</p>
+</li>
+<li>
+<p>AI-generated insights.</p>
+</li>
+<li>
+<p>Upcoming financial obligations.</p>
+</li>
+</ul>
+<p><strong>AI assistant</strong></p>
+<ul>
+<li>
+<p>Persistent, accessible entry point.</p>
+</li>
+<li>
+<p>Expandable side panel or dedicated workspace.</p>
+</li>
+<li>
+<p>Suggested question chips.</p>
+</li>
+<li>
+<p>Conversation history.</p>
+</li>
+<li>
+<p>Evidence-backed financial answers.</p>
+</li>
+<li>
+<p>Clear distinction between user messages, AI responses, and financial actions.</p>
+</li>
+</ul>
+<h3>Design details</h3>
+<p>Use professional typography, consistent spacing, clear information hierarchy, subtle hover states, purposeful transitions, and meaningful loading states.</p>
+<p>Use Lucide icons consistently.</p>
+<p>Use attractive charts with readable axes, legends, and tooltips.</p>
+<p>Avoid excessive glassmorphism, oversized decorative elements, random animations, and unnecessary illustrations.</p>
+<p>Include a polished login/onboarding experience, realistic empty states, error states, confirmation dialogs, and success feedback.</p>
+<p>The UI must be fully functional, not merely attractive.</p>
+<h3>Branding</h3>
+<p>Create a simple Finora 融财 wordmark and a small, original financial-flow-inspired icon using appropriate SVG or CSS.</p>
+<p>Do not use copyrighted brand logos or imply endorsement by any bank or payment provider.</p>
+<div><hr /></div>
+<h1>6. TECHNICAL ARCHITECTURE</h1>
+<p>First inspect the existing workspace and its installed dependencies. Reuse a healthy existing stack where practical.</p>
+<p>If starting from an empty workspace, use the following preferred stack:</p>
+<h3>Frontend</h3>
+<ul>
+<li>
+<p>Next.js with TypeScript.</p>
+</li>
+<li>
+<p>React.</p>
+</li>
+<li>
+<p>Tailwind CSS.</p>
+</li>
+<li>
+<p>shadcn/ui or equivalent accessible components.</p>
+</li>
+<li>
+<p>Lucide icons.</p>
+</li>
+<li>
+<p>Recharts or an equivalent reliable chart library.</p>
+</li>
+<li>
+<p>A robust internationalization solution supporting English and Simplified Chinese.</p>
+</li>
+</ul>
+<h3>Backend</h3>
+<p>Prefer a maintainable architecture using Next.js server-side routes or a dedicated Python FastAPI service if that better fits the existing project.</p>
+<p>The backend must handle:</p>
+<ul>
+<li>
+<p>Business data access.</p>
+</li>
+<li>
+<p>Financial calculations.</p>
+</li>
+<li>
+<p>Cash-flow forecasting.</p>
+</li>
+<li>
+<p>Invoice operations.</p>
+</li>
+<li>
+<p>Expense analysis.</p>
+</li>
+<li>
+<p>AI-provider communication.</p>
+</li>
+<li>
+<p>LLM tool execution.</p>
+</li>
+<li>
+<p>Input validation.</p>
+</li>
+<li>
+<p>Authorization checks.</p>
+</li>
+<li>
+<p>Audit logging.</p>
+</li>
+</ul>
+<h3>Database</h3>
+<p>Use PostgreSQL for a production-oriented setup, with an appropriate ORM and database migrations.</p>
+<p>If the environment cannot support PostgreSQL, provide a documented local development alternative without hardcoding production assumptions.</p>
+<p>Define entities for:</p>
+<ul>
+<li>
+<p>Users.</p>
+</li>
+<li>
+<p>Organizations.</p>
+</li>
+<li>
+<p>Organization memberships and roles.</p>
+</li>
+<li>
+<p>Business settings.</p>
+</li>
+<li>
+<p>Transactions.</p>
+</li>
+<li>
+<p>Accounts.</p>
+</li>
+<li>
+<p>Customers.</p>
+</li>
+<li>
+<p>Suppliers.</p>
+</li>
+<li>
+<p>Invoices.</p>
+</li>
+<li>
+<p>Invoice line items.</p>
+</li>
+<li>
+<p>Payments.</p>
+</li>
+<li>
+<p>Budgets.</p>
+</li>
+<li>
+<p>Financial forecasts.</p>
+</li>
+<li>
+<p>Risk alerts.</p>
+</li>
+<li>
+<p>AI conversations.</p>
+</li>
+<li>
+<p>AI tool executions.</p>
+</li>
+<li>
+<p>Audit events.</p>
+</li>
+<li>
+<p>Financing products.</p>
+</li>
+<li>
+<p>Uploaded documents.</p>
+</li>
+</ul>
+<p>Use stable identifiers, appropriate indexes, timestamps, and relationships.</p>
+<p>Enforce organization-level data isolation. A user must never be able to access another business's records by changing an ID in a request.</p>
+<h3>Code quality</h3>
+<ul>
+<li>
+<p>Use strict TypeScript where applicable.</p>
+</li>
+<li>
+<p>Keep financial calculations in reusable, tested modules.</p>
+</li>
+<li>
+<p>Separate UI, business logic, database access, and AI orchestration.</p>
+</li>
+<li>
+<p>Avoid giant components and duplicated logic.</p>
+</li>
+<li>
+<p>Validate inputs and API responses.</p>
+</li>
+<li>
+<p>Provide useful error handling.</p>
+</li>
+<li>
+<p>Add unit and integration tests.</p>
+</li>
+<li>
+<p>Include clear setup instructions.</p>
+</li>
+<li>
+<p>Keep secrets in environment variables.</p>
+</li>
+<li>
+<p>Provide an <code>.env.example</code> containing placeholder names only.</p>
+</li>
+<li>
+<p>Never commit actual API keys or credentials.</p>
+</li>
+</ul>
+<p>Do not introduce unnecessary dependencies or architecture complexity that delays the working MVP.</p>
+<div><hr /></div>
+<h1>7. FINANCIAL CALCULATION ENGINE</h1>
+<p>Implement financial calculations as deterministic, testable functions.</p>
+<p>At minimum, implement:</p>
+<ol start="1">
+<li>
+<p>Total revenue for a selected period.</p>
+</li>
+<li>
+<p>Total expenses for a selected period.</p>
+</li>
+<li>
+<p>Net profit based on the application's defined accounting assumptions.</p>
+</li>
+<li>
+<p>Gross profit when cost-of-goods-sold data is available.</p>
+</li>
+<li>
+<p>Accounts receivable.</p>
+</li>
+<li>
+<p>Accounts payable.</p>
+</li>
+<li>
+<p>Invoice aging.</p>
+</li>
+<li>
+<p>Cash inflows and outflows.</p>
+</li>
+<li>
+<p>Opening and closing cash balances.</p>
+</li>
+<li>
+<p>Cash runway estimates.</p>
+</li>
+<li>
+<p>Budget-versus-actual comparisons.</p>
+</li>
+<li>
+<p>Revenue and expense growth rates.</p>
+</li>
+<li>
+<p>Customer payment-delay statistics.</p>
+</li>
+<li>
+<p>Cash-flow forecasts.</p>
+</li>
+<li>
+<p>Scenario simulations.</p>
+</li>
+<li>
+<p>Duplicate-transaction detection.</p>
+</li>
+<li>
+<p>Unusual-expense detection.</p>
+</li>
+</ol>
+<p>Clearly distinguish cash flow from accounting profit.</p>
+<p>Document how taxes, refunds, transfers, partial payments, and missing data are treated.</p>
+<p>Avoid double-counting invoices and the transactions used to settle them.</p>
+<p>Use appropriate decimal arithmetic for money calculations. Avoid floating-point errors in financial totals.</p>
+<p>Show the calculation basis or assumptions when a result may otherwise be misleading.</p>
+<p>If the available data is insufficient for a metric, display "Insufficient data" or the appropriate localized equivalent.</p>
+<div><hr /></div>
+<h1>8. SECURITY, PRIVACY, AND RESPONSIBLE AI</h1>
+<p>Financial information is sensitive. Security must be part of the product architecture.</p>
+<p>Implement:</p>
+<ul>
+<li>
+<p>Authentication.</p>
+</li>
+<li>
+<p>Role-based access control.</p>
+</li>
+<li>
+<p>Organization-level authorization.</p>
+</li>
+<li>
+<p>Server-side secret management.</p>
+</li>
+<li>
+<p>Input validation.</p>
+</li>
+<li>
+<p>Safe file handling.</p>
+</li>
+<li>
+<p>Rate limiting for sensitive endpoints where practical.</p>
+</li>
+<li>
+<p>Audit logs for important changes.</p>
+</li>
+<li>
+<p>Secure session handling.</p>
+</li>
+<li>
+<p>Protection against common web vulnerabilities.</p>
+</li>
+<li>
+<p>Clear consent before connecting external services.</p>
+</li>
+<li>
+<p>Minimal collection and retention of personal data.</p>
+</li>
+<li>
+<p>Safe error messages that do not expose secrets or internal stack traces.</p>
+</li>
+</ul>
+<p>Use synthetic data for demonstrations.</p>
+<p>Do not request or store real banking passwords, payment PINs, or unnecessary identity information.</p>
+<p>Do not integrate directly with real payment rails or initiate real transfers in the MVP.</p>
+<p>Any future payment integration must use authorized, appropriately licensed providers and follow applicable requirements.</p>
+<h3>AI security</h3>
+<p>Treat imported documents, transaction descriptions, and user-provided text as untrusted data.</p>
+<p>Defend against prompt injection and malicious instructions embedded in uploaded content.</p>
+<p>Never let uploaded content override the system's security rules.</p>
+<p>Do not expose system prompts, credentials, private records, or another organization's information.</p>
+<p>Require explicit user confirmation for consequential actions.</p>
+<p>For financial actions, use a preview-confirm-execute workflow. Log the action and its result.</p>
+<p>The AI may suggest a payment reminder, create a draft, or prepare an action. It must not claim to have sent a message, approved a loan, or transferred funds without verified execution.</p>
+<p>Every important AI recommendation should explain why it was generated and identify its supporting data.</p>
+<div><hr /></div>
+<h1>9. REALISTIC DEMONSTRATION ENVIRONMENT</h1>
+<p>Build a compelling demo mode that works immediately after setup.</p>
+<p>Create three clearly labeled synthetic Chinese SME profiles.</p>
+<h3>Demo Business A: Shenzhen E-commerce SME</h3>
+<p>Business type: Online retail.</p>
+<p>Demonstrate:</p>
+<ul>
+<li>
+<p>Revenue and expense analysis.</p>
+</li>
+<li>
+<p>Customer payment delays.</p>
+</li>
+<li>
+<p>Inventory-related cash pressure.</p>
+</li>
+<li>
+<p>Monthly cash-flow forecasting.</p>
+</li>
+<li>
+<p>Expense anomalies.</p>
+</li>
+<li>
+<p>Working-capital planning.</p>
+</li>
+</ul>
+<h3>Demo Business B: Guangzhou Trading Company</h3>
+<p>Business type: Wholesale and trading.</p>
+<p>Demonstrate:</p>
+<ul>
+<li>
+<p>Large receivables and supplier obligations.</p>
+</li>
+<li>
+<p>Invoice aging.</p>
+</li>
+<li>
+<p>Customer concentration.</p>
+</li>
+<li>
+<p>Payment-timing scenarios.</p>
+</li>
+<li>
+<p>Financing comparisons.</p>
+</li>
+<li>
+<p>Cash-shortage prevention.</p>
+</li>
+</ul>
+<h3>Demo Business C: Chengdu Service Agency</h3>
+<p>Business type: Professional services.</p>
+<p>Demonstrate:</p>
+<ul>
+<li>
+<p>Recurring revenue.</p>
+</li>
+<li>
+<p>Payroll and operating costs.</p>
+</li>
+<li>
+<p>Profitability trends.</p>
+</li>
+<li>
+<p>Outstanding invoices.</p>
+</li>
+<li>
+<p>Budget planning.</p>
+</li>
+<li>
+<p>Hiring-cost scenarios.</p>
+</li>
+</ul>
+<p>Create enough internally consistent synthetic transactions, invoices, customers, and suppliers to make the charts and analysis meaningful.</p>
+<p>Use realistic amounts in CNY, coherent dates, and consistent invoice/payment relationships.</p>
+<p>Clearly mark all demo records as simulated.</p>
+<p>The demo businesses must be selectable from the interface so judges can see how the same application serves different SME types.</p>
+<p>Do not use real customer financial information.</p>
+<div><hr /></div>
+<h1>10. DEMONSTRATION STORY FOR JUDGES</h1>
+<p>Design the application around a short, convincing end-to-end demonstration.</p>
+<p>The demo should take approximately five minutes.</p>
+<h3>Scene 1: Business overview</h3>
+<p>Open the Shenzhen e-commerce demo.</p>
+<p>Show its financial KPIs, outstanding invoices, upcoming bills, and cash-flow forecast.</p>
+<p>Explain how a small-business owner can understand their financial position immediately.</p>
+<h3>Scene 2: Ask the AI copilot</h3>
+<p>Ask:</p>
+<p>"Will my business have enough cash to cover its upcoming obligations over the next 30 days?"</p>
+<p>Chinese equivalent:</p>
+<p>&ldquo;未来30天，我的企业是否有足够的现金支付即将到期的款项？&rdquo;</p>
+<p>The AI should retrieve the relevant financial records, calculate the projection, show the evidence, explain uncertainty, and recommend next steps.</p>
+<h3>Scene 3: Investigate a risk</h3>
+<p>Open a real synthetic-data risk alert, such as overdue receivables or an unusual expense.</p>
+<p>Show the supporting transactions and the explanation behind the alert.</p>
+<h3>Scene 4: Simulate a business decision</h3>
+<p>Reduce expected revenue or delay a customer payment.</p>
+<p>Show how the cash-flow projection changes and when a shortfall might occur.</p>
+<h3>Scene 5: Explore financing</h3>
+<p>Open the financing assistant.</p>
+<p>Compare a clearly labeled hypothetical financing option with the scenario of operating without new financing.</p>
+<p>Show estimated repayment obligations and their effect on future cash flow.</p>
+<h3>Scene 6: Switch languages</h3>
+<p>Switch the complete application to Simplified Chinese.</p>
+<p>Demonstrate the localized dashboard, charts, navigation, financial terms, and AI conversation.</p>
+<p>The entire flow must be reproducible without real bank connections or external payment credentials.</p>
+<div><hr /></div>
+<h1>11. COMPETITION PRESENTATION READINESS</h1>
+<p>Build the product so that the team can explain the following clearly:</p>
+<ul>
+<li>
+<p>What specific SME problem does Finora solve?</p>
+</li>
+<li>
+<p>Who experiences this problem?</p>
+</li>
+<li>
+<p>Why are existing spreadsheets or basic accounting dashboards insufficient?</p>
+</li>
+<li>
+<p>How does the AI use real application data?</p>
+</li>
+<li>
+<p>Which calculations are deterministic and which outputs are AI-generated?</p>
+</li>
+<li>
+<p>How does the product forecast cash-flow problems?</p>
+</li>
+<li>
+<p>How does it help businesses understand financing options?</p>
+</li>
+<li>
+<p>How does it prevent misleading financial recommendations?</p>
+</li>
+<li>
+<p>How does it protect business data?</p>
+</li>
+<li>
+<p>What is innovative about the copilot?</p>
+</li>
+<li>
+<p>What are its current limitations?</p>
+</li>
+<li>
+<p>How could it integrate with authorized financial service providers in the future?</p>
+</li>
+</ul>
+<p>Prepare a concise product description and a technical architecture document.</p>
+<p>Do not invent market-size statistics, customer interviews, user counts, partnerships, or performance metrics.</p>
+<p>Clearly distinguish implemented capabilities from planned future integrations.</p>
+<p>The official competition materials should remain the authority for submission requirements. This prompt defines the intended product, not a replacement for the competition rules.</p>
+<div><hr /></div>
+<h1>12. TESTING AND ACCEPTANCE CRITERIA</h1>
+<p>Do not consider the project finished simply because the homepage renders.</p>
+<p>The following requirements must be verified.</p>
+<h3>Product functionality</h3>
+<ul>
+<li><input type="text" />
+<div>
+<p>Dashboard values derive from actual application data.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Date filters update the displayed financial metrics.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Charts display the correct datasets.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Invoice creation and editing work.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Invoice status changes update the relevant summaries.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Expense filters and comparisons work.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Cash-flow calculations are tested.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Forecast assumptions affect the resulting projections.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Scenario simulations produce consistent results.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>CSV imports validate records and handle errors.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>The AI chat answers using the correct business context.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>AI tools validate inputs and enforce permissions.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Missing AI credentials trigger a transparent demo fallback.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Financing comparisons disclose assumptions.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Risk alerts are supported by identifiable records.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>English and Simplified Chinese work throughout the application.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>The language selection persists across navigation and reloads.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Responsive layouts work at desktop, tablet, and mobile widths.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Loading, empty, error, and success states are present.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Authentication and organization-level access restrictions are tested.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>Sensitive actions require appropriate confirmation.</p>
+</div>
+</li>
+<li><input type="text" />
+<div>
+<p>No live payment or banking action is falsely represented as completed.</p>
+</div>
+</li>
+</ul>
+<h3>Technical quality</h3>
+<p>Run available linting, type checking, unit tests, integration tests, and production-build checks.</p>
+<p>Fix errors instead of merely reporting them.</p>
+<p>Add test cases for zero balances, negative cash flow, partial payments, overdue invoices, duplicate transactions, missing data, and unusual date ranges.</p>
+<p>Verify the calculations against manually checked examples.</p>
+<p>Do not claim a test passed unless you actually ran it.</p>
+<div><hr /></div>
+<h1>13. EXECUTION PLAN</h1>
+<p>Work through these phases in order, but continue implementation rather than stopping after presenting the plan.</p>
+<p><strong>Phase 1 &mdash; Inspect and plan</strong></p>
+<ul>
+<li>
+<p>Inspect the repository, dependencies, and existing implementation.</p>
+</li>
+<li>
+<p>Read the reference PDF completely.</p>
+</li>
+<li>
+<p>Identify reusable code and missing components.</p>
+</li>
+<li>
+<p>Establish the architecture and prioritized implementation plan.</p>
+</li>
+<li>
+<p>Document assumptions and major risks.</p>
+</li>
+</ul>
+<p><strong>Phase 2 &mdash; Foundation</strong></p>
+<ul>
+<li>
+<p>Set up the design system.</p>
+</li>
+<li>
+<p>Implement branding, navigation, routing, and internationalization.</p>
+</li>
+<li>
+<p>Establish the database schema and demo-data model.</p>
+</li>
+<li>
+<p>Create reusable UI components.</p>
+</li>
+</ul>
+<p><strong>Phase 3 &mdash; Financial core</strong></p>
+<ul>
+<li>
+<p>Implement transactions, invoices, expenses, financial summaries, and calculations.</p>
+</li>
+<li>
+<p>Build the cash-flow engine.</p>
+</li>
+<li>
+<p>Add forecasting and scenario simulation.</p>
+</li>
+<li>
+<p>Create the dashboard and risk center.</p>
+</li>
+</ul>
+<p><strong>Phase 4 &mdash; AI integration</strong></p>
+<ul>
+<li>
+<p>Implement the provider adapter and secure server-side LLM integration.</p>
+</li>
+<li>
+<p>Add financial tools and contextual retrieval.</p>
+</li>
+<li>
+<p>Implement bilingual AI interactions.</p>
+</li>
+<li>
+<p>Add evidence-backed responses, confirmation flows, and demo fallback.</p>
+</li>
+</ul>
+<p><strong>Phase 5 &mdash; Financing and imports</strong></p>
+<ul>
+<li>
+<p>Implement the financing comparison workspace.</p>
+</li>
+<li>
+<p>Add CSV import and validation.</p>
+</li>
+<li>
+<p>Add invoice-document extraction if feasible.</p>
+</li>
+<li>
+<p>Integrate these features with the dashboard and AI copilot.</p>
+</li>
+</ul>
+<p><strong>Phase 6 &mdash; Polish and verification</strong></p>
+<ul>
+<li>
+<p>Improve visual consistency and responsive layouts.</p>
+</li>
+<li>
+<p>Test English and Simplified Chinese.</p>
+</li>
+<li>
+<p>Run financial correctness tests.</p>
+</li>
+<li>
+<p>Run security checks and production-build verification.</p>
+</li>
+<li>
+<p>Fix discovered problems.</p>
+</li>
+<li>
+<p>Verify the complete five-minute demonstration flow.</p>
+</li>
+</ul>
+<p><strong>Phase 7 &mdash; Handover</strong></p>
+<p>Provide:</p>
+<ol start="1">
+<li>
+<p>A concise summary of what was implemented.</p>
+</li>
+<li>
+<p>The actual project structure.</p>
+</li>
+<li>
+<p>Setup and installation instructions.</p>
+</li>
+<li>
+<p>Database setup and migration commands.</p>
+</li>
+<li>
+<p>Environment-variable documentation.</p>
+</li>
+<li>
+<p>Instructions for configuring the LLM provider.</p>
+</li>
+<li>
+<p>Instructions for launching the application.</p>
+</li>
+<li>
+<p>Demo account details or demo-mode instructions, if applicable.</p>
+</li>
+<li>
+<p>Tests run and their actual results.</p>
+</li>
+<li>
+<p>Known limitations and future improvements.</p>
+</li>
+<li>
+<p>A concise competition demo script.</p>
+</li>
+<li>
+<p>A prioritized list of any remaining work.</p>
+</li>
+</ol>
+<div><hr /></div>
+<h1>14. WORKING RULES</h1>
+<p>Follow these rules throughout the implementation:</p>
+<ol start="1">
+<li>
+<p>Build the actual application, not only a landing page or Figma-like mockup.</p>
+</li>
+<li>
+<p>Do not stop after giving me a plan or architecture proposal.</p>
+</li>
+<li>
+<p>Inspect existing files before modifying them.</p>
+</li>
+<li>
+<p>Preserve working code and avoid unnecessary rewrites.</p>
+</li>
+<li>
+<p>Prefer a complete, reliable MVP over many unfinished features.</p>
+</li>
+<li>
+<p>Make the primary user flows functional end to end.</p>
+</li>
+<li>
+<p>Use realistic synthetic data instead of fabricated real-world claims.</p>
+</li>
+<li>
+<p>Never hardcode financial dashboard values when they should be calculated.</p>
+</li>
+<li>
+<p>Keep financial arithmetic separate from LLM-generated prose.</p>
+</li>
+<li>
+<p>Use real AI integration when configured and transparent demo mode otherwise.</p>
+</li>
+<li>
+<p>Do not expose API keys or sensitive business data.</p>
+</li>
+<li>
+<p>Make English and Simplified Chinese equally usable.</p>
+</li>
+<li>
+<p>Avoid adding unnecessary features that distract from Topic E.</p>
+</li>
+<li>
+<p>If an external integration is unavailable, provide a clear interface and a documented fallback.</p>
+</li>
+<li>
+<p>If a requirement is ambiguous, make a reasonable, documented decision and continue.</p>
+</li>
+<li>
+<p>If a technical limitation blocks a feature, implement the safest useful alternative and explain the limitation.</p>
+</li>
+<li>
+<p>Test the application in the available environment instead of assuming it works.</p>
+</li>
+<li>
+<p>Prioritize financial correctness, explainability, security, and usability over visual gimmicks.</p>
+</li>
+</ol>
+<h2>FINAL OBJECTIVE</h2>
+<p>Deliver <strong>Finora 融财</strong>, a polished bilingual AI-powered SME Finance Copilot that a small-business owner can actually use in a realistic demonstration.</p>
+<p>It must combine financial dashboards, invoice and expense management, cash-flow forecasting, business risk alerts, financing analysis, and a contextual AI copilot in one coherent product.</p>
+<p>Its distinguishing characteristic should be:</p>
+<p><strong>An AI that does not merely describe a business's financial problems&mdash;it identifies the evidence, calculates the potential impact, explains the uncertainty, and helps the owner evaluate the next action.</strong></p>
+<p>Start by inspecting the workspace and reading the reference PDF. Then implement the application in phases, verify the result, and continue until the core acceptance criteria are met or a clearly documented technical limitation prevents further progress.</p>
