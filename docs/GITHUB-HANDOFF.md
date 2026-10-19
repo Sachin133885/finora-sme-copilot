@@ -1,3 +1,5 @@
+> Historical preparation record. For the current 1.2 source and repository refresh, see [SETUP.md](SETUP.md), [REPOSITORY_VERIFICATION.md](REPOSITORY_VERIFICATION.md), and the root README. Earlier pending-deployment, test-count and missing-password-reset statements below may be superseded.
+
 # Publish the Part 4 source
 
 Intended owner: **sachin133885**. Suggested repository name: **finora-sme-copilot**. This is a proposed destination, not a verified published repository.

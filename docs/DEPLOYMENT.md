@@ -1,3 +1,5 @@
+> Historical preparation record. For the current 1.2 source and repository refresh, see [SETUP.md](SETUP.md), [REPOSITORY_VERIFICATION.md](REPOSITORY_VERIFICATION.md), and the root README. Earlier pending-deployment, test-count and missing-password-reset statements below may be superseded.
+
 # Hosting and deployment
 
 Current public app: https://finora-sme-copilot.bravehare4.chatgpt.site/

@@ -1,3 +1,5 @@
+> Historical preparation record. For the current 1.2 source and repository refresh, see [SETUP.md](SETUP.md), [REPOSITORY_VERIFICATION.md](REPOSITORY_VERIFICATION.md), and the root README. Earlier pending-deployment, test-count and missing-password-reset statements below may be superseded.
+
 # Finora Render and Supabase setup
 
 This is a tested migration candidate, not a verified live deployment. It preserves the app workflows and leaves the existing public Site untouched. Use free plans within their limits. Do not enter secret values into chat, GitHub files or a screenshot.

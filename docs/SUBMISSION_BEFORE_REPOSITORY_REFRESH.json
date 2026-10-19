@@ -1,0 +1,34 @@
+{
+  "app": "Finora",
+  "competition_topic": "Topic E \u2014 SME Finance Copilot",
+  "prepared_date": "2026-10-18",
+  "source_commit": "522435c6b9b48fdc3f6b5622a2eb02b4b8993f7a",
+  "site_version": 10,
+  "public_app_url": "https://finora-sme-copilot.bravehare4.chatgpt.site/",
+  "intended_github_owner": "sachin133885",
+  "github_repository_url": "https://github.com/Sachin133885/finora-sme-copilot",
+  "github_publication_status": "baseline uploaded; this migration update not uploaded",
+  "application_source_modified": true,
+  "added_material": [
+    "README replacement; original retained as docs/development-history.md",
+    ".gitignore",
+    ".github/workflows/tests.yml",
+    "docs/DEPLOYMENT.md",
+    "docs/GITHUB-HANDOFF.md",
+    "docs/VERIFICATION.md",
+    "SUBMISSION.json",
+    "SHA256SUMS.txt"
+  ],
+  "tests": {
+    "suites_passed": 31,
+    "suites_total": 31,
+    "sql_integration": "PGlite with simulated Supabase Auth schema",
+    "real_supabase_project_verified": false,
+    "real_browser_check": false,
+    "fresh_live_ai_verified": false
+  },
+  "deployment_target": "Render Free with Supabase; optional Vercel frontend",
+  "status": "prepared and locally tested; not deployed",
+  "migration_guide": "docs/RENDER_SETUP.md",
+  "password_recovery": "implemented locally; awaiting GitHub upload, Render redeploy, Supabase redirect allowlist and real email verification"
+}

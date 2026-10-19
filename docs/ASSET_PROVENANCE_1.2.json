@@ -1,0 +1,29 @@
+{
+  "assets": [
+    {
+      "file": "src/assets/finora-dragon.png",
+      "source": "Generated with built-in image generation from user-supplied Finora design reference",
+      "mode": "RGBA",
+      "dimensions": [
+        1774,
+        887
+      ],
+      "transparent_pixel_fraction": 0.6019,
+      "sha256": "ff454d7f096eeb33f71b17031bf19a728fb24bd535929bca45d2d6e1d4a10400"
+    },
+    {
+      "file": "src/assets/dragon-walk.png",
+      "source": "Generated with built-in image generation from user-supplied Finora design reference",
+      "mode": "RGBA",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "transparent_pixel_fraction": 0.6614,
+      "sha256": "055cafa1b791edcbb3894bd64becd613f0689a0019a41e0cb3de64b582953870"
+    }
+  ],
+  "vector_icons": "Original inline SVG icon family authored for Finora; no third-party bank/payment logos",
+  "motion": "Six generated articulated pose frames in a 3-column x 2-row sheet, CSS frame playback and a clipped SVG ember, tap replay, reduced-motion still",
+  "reference_images": "User supplied; used for direction, not as flattened application screens"
+}
