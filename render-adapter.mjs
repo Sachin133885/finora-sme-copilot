@@ -1,0 +1,41 @@
+import assert from 'node:assert/strict';
+import {seed} from '../src/engine.js';
+const mod=await import('../src/render-adapter.mjs').catch(()=>({}));
+assert.equal(typeof mod.createRenderHandler,'function','Render adapter is missing');
+const calls=[];let confirmed=true,expired=false;
+const id='11111111-1111-4111-8111-111111111111';
+const user={id,email:'owner@example.test',email_confirmed_at:'2026-10-18T00:00:00Z'};
+const env={SUPABASE_URL:'https://rrbzfaznyytijabupxkv.supabase.co',SUPABASE_PUBLISHABLE_KEY:'test-public',SUPABASE_SECRET_KEY:'test-private',APP_ORIGIN:'https://finora.test'};
+const provider=async(url,opts={})=>{const u=new URL(url);calls.push({url:u.href,headers:new Headers(opts.headers),body:opts.body?JSON.parse(opts.body):null});
+ if(u.pathname==='/auth/v1/token'){if(u.searchParams.get('grant_type')==='refresh_token'){expired=false;return Response.json({access_token:'new-access',refresh_token:'new-refresh',expires_in:3600,user});}return Response.json({access_token:'test-access',refresh_token:'test-refresh',expires_in:3600,user});}
+ if(u.pathname==='/auth/v1/signup')return Response.json(confirmed?{access_token:'test-access',refresh_token:'test-refresh',expires_in:3600,user}:{user});
+ if(u.pathname==='/auth/v1/user')return expired?Response.json({error:'expired'},{status:401}):Response.json(user);
+ if(u.pathname==='/auth/v1/logout')return new Response(null,{status:204});
+ if(u.pathname==='/rest/v1/rpc/finora_workspace'){const b=JSON.parse(opts.body);if(b.p_action==='list'||b.p_action==='initialize')return Response.json({status:200,businesses:[{owner:id,key:'shenzhen',role:'owner',owner_email:user.email}]});if(b.p_action==='save')return Response.json(b.p_revision===1?{status:200,revision:2}:{status:409,error:'Conflict'});return Response.json({status:200,data:seed('shenzhen'),revision:1,role:'owner'});}
+ throw Error('Unexpected upstream call');};
+let forwarded=null;
+const worker={fetch:async req=>{forwarded=req;return Response.json({authenticated:!!req.headers.get('oai-authenticated-user-id')});}};
+const handle=mod.createRenderHandler(env,{worker,fetcher:provider});
+const call=(p,body,headers={},method=body?'POST':'GET')=>handle(new Request('https://finora.test'+p,{method,headers:{...(body?{origin:'https://finora.test','content-type':'application/json'}:{}),...headers},...(body?{body:JSON.stringify(body)}:{})}));
+const status=await (await call('/api/status',null,{'oai-authenticated-user-id':'forged'})).json();assert.equal(status.authenticated,false);assert.equal(status.identityMode,'supabase');
+assert.equal((await call('/api/login',{email:user.email,password:'twelve-or-more-password'},{origin:'https://evil.test'})).status,403);
+confirmed=false;let r=await call('/api/register',{email:user.email,password:'twelve-or-more-password'});assert.equal((await r.json()).confirmationRequired,true);assert.equal(r.headers.get('set-cookie'),null);
+confirmed=true;r=await call('/api/login',{email:user.email,password:'twelve-or-more-password'});assert.equal(r.status,200);
+const login=await r.json();assert.equal(login.user.id,id);assert.ok(login.csrf);assert.equal(login.access_token,undefined);
+const set=r.headers.getSetCookie();assert.equal(set.length,3);assert.ok(set.every(x=>/HttpOnly/.test(x)&&/Secure/.test(x)&&/SameSite=Lax/.test(x)));
+let cookie=set.map(x=>x.split(';')[0]).join('; ');
+assert.equal((await call('/api/business', {data:seed('shenzhen'),revision:1},{cookie},'PUT')).status,403);
+r=await call('/api/business?key=shenzhen',{data:seed('shenzhen'),revision:1},{cookie,'x-csrf-token':login.csrf,'oai-authenticated-user-id':'forged'},'PUT');assert.equal(r.status,200);assert.equal((await r.json()).revision,2);
+const rpc=calls.filter(x=>x.url.includes('/rpc/')).at(-1);assert.equal(rpc.body.p_actor,id);assert.equal(rpc.headers.get('apikey'),'test-private');
+assert.equal((await call('/api/business?key=shenzhen',{data:seed('shenzhen'),revision:0},{cookie,'x-csrf-token':login.csrf},'PUT')).status,409);
+const wrong=seed('guangzhou');assert.equal((await call('/api/business?key=shenzhen',{data:wrong,revision:1},{cookie,'x-csrf-token':login.csrf},'PUT')).status,400);
+expired=true;r=await call('/api/session',null,{cookie});const session=await r.json();assert.equal(session.user.id,id);assert.equal(session.csrf,login.csrf);assert.ok(r.headers.getSetCookie().some(x=>x.includes('new-access')));
+await call('/api/analyze',{live:true,consent:true},{'oai-authenticated-user-id':'forged','oai-authenticated-user-email':'forged@example.test'});assert.equal(forwarded.headers.get('oai-authenticated-user-id'),null);
+await call('/api/analyze',{live:true,consent:true},{cookie,'oai-authenticated-user-id':'forged'});assert.equal(forwarded.headers.get('oai-authenticated-user-id'),id);
+assert.equal((await call('/signin-with-chatgpt')).status,302);
+r=await call('/api/logout',{}, {cookie,'x-csrf-token':login.csrf});assert.equal(r.status,200);assert.ok(r.headers.getSetCookie().every(x=>x.includes('Max-Age=0')));
+assert.ok(!(JSON.stringify(login)+JSON.stringify(session)).includes('test-private'));
+assert.throws(()=>mod.createRenderHandler({...env,SUPABASE_URL:'http://insecure.test'},{worker}),/Supabase/);
+const limited=mod.createRenderHandler(env,{worker,fetcher:provider});
+for(let i=0;i<9;i++){const r=await limited(new Request('https://finora.test/api/login',{method:'POST',headers:{origin:'https://finora.test','content-type':'application/json','x-finora-client-ip':'forged-'+i,'x-render-client-ip':'also-forged-'+i},body:JSON.stringify({email:user.email,password:'long-test-password'})}));assert.equal(r.status,i<8?200:429);}
+console.log('PASS Render auth verification, confirmation, cookies, CSRF, refresh, workspace validation, conflict mapping and identity spoof protection');

@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';import {pathToFileURL} from 'node:url';import {installTourDOM} from './helpers/tour-dom.mjs';
+const dom=installTourDOM();Object.assign(globalThis,{location:{hash:'#account',protocol:'https:'},innerWidth:390});dom.storage.set('finora-lang','en');dom.storage.set('finora-welcome-v4:guest','seen');
+globalThis.FormData=class{constructor(f){this.vals=f.vals||{}}*[Symbol.iterator](){yield*Object.entries(this.vals)}};
+let pending=true,posts=[];
+globalThis.fetch=async(url,opts={})=>{posts.push({url,opts});if(url==='/api/status')return Response.json({accounts:true,identityMode:'supabase',authenticated:false,mode:'demo'});if(url==='/api/session')return Response.json({user:null});return Response.json(pending?{confirmationRequired:true}:{user:{id:'verified-user',email:'owner@example.test'},csrf:'test-csrf',businesses:[],accounts:true});};
+let source=fs.readFileSync('src/app.js','utf8').replace(/from '\/(.*?)'/g,(_,f)=>'from '+JSON.stringify(pathToFileURL(process.cwd()+'/src/'+f).href));
+source+=`\nexport {initialAccountReady};export const configure=()=>{aiStatus={accounts:true,identityMode:'supabase',authenticated:false,mode:'demo'};page='account';render();};export const state=()=>({data,accountState,cloudIdentity,aiStatus});`;
+const app=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));await app.initialAccountReady;app.configure();
+assert.ok(document.querySelector('#authform'),'Supabase must offer a real login form, not a ChatGPT redirect');
+const before=JSON.stringify(app.state().data),f=document.querySelector('#authform');f.vals={email:'owner@example.test',password:'long-test-password',mode:'register'};
+dom.dispatch({type:'submit',target:f});await dom.tick();assert.equal(app.state().accountState.user,null);assert.equal(JSON.stringify(app.state().data),before);assert.match(document.querySelector('#toast').textContent,/confirm|email/i);
+pending=false;f.vals.mode='login';dom.dispatch({type:'submit',target:f});await dom.tick();assert.equal(app.state().cloudIdentity.user.id,'verified-user');assert.equal(app.state().accountState.user,null,'login must not silently replace guest records');assert.equal(JSON.stringify(app.state().data),before);assert.ok(document.querySelector('[data-action="cloudinitialize"]'));
+assert.equal(posts.filter(x=>x.url.includes('/api/initialize')).length,0,'login itself must not initialize or overwrite workspaces');
+const signout=document.querySelector('[data-action="signout"]');assert.ok(signout,'signed-in guest must be able to sign out without opening cloud data');signout.click();await dom.tick();assert.equal(app.state().cloudIdentity,null);assert.equal(JSON.stringify(app.state().data),before,'sign-out must preserve active guest records');
+console.log('PASS Supabase confirmation, real sign-in form and explicit cloud-switch boundary preserve guest records');

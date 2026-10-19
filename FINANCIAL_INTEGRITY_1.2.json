@@ -1,0 +1,30 @@
+{
+  "src/engine.js": {
+    "unchanged": true,
+    "sha256": "68585ca324ee4aa279b342e456e34b0dc41e8d97d97bc8a64a0207663e214cda"
+  },
+  "src/business-ai.js": {
+    "unchanged": true,
+    "sha256": "58c6850b220f359237e65104d2740dad56055396f4eb796f00f9de900b95c270"
+  },
+  "src/readiness.js": {
+    "unchanged": true,
+    "sha256": "435d59c6bf62155e951009336e42197bf69e9ebd7ce9ae97b77f45129b0f6f5a"
+  },
+  "src/rescue.js": {
+    "unchanged": true,
+    "sha256": "7ed98e90b56fe1347a3f071f91d3aa6faf7f4cafaefd56e2f8414183dbce92f8"
+  },
+  "src/pdf-receipts.js": {
+    "unchanged": true,
+    "sha256": "2de84fd87a88eb17497d2dd350b2a48d10c46526ce6ab194fb8f66b9d803a6d3"
+  },
+  "src/cloud-accounts.js": {
+    "unchanged": true,
+    "sha256": "2132e84cb6667aa00a0cfd8c97204f78dd626c83632261e2093adad402740b8b"
+  },
+  "src/render-adapter.mjs": {
+    "unchanged": true,
+    "sha256": "eaf6eec37271c51b3f9e6bbd168c6c3197cca6c05b1ab3f6a8b12a5ff2db723b"
+  }
+}

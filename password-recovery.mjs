@@ -1,0 +1,43 @@
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import {recoveryJS} from '../src/password-recovery.mjs';
+import {createRenderHandler} from '../src/render-adapter.mjs';
+const calls=[];let expired=false,mailLimited=false;
+const env={SUPABASE_URL:'https://project.supabase.co',SUPABASE_PUBLISHABLE_KEY:'public-test',SUPABASE_SECRET_KEY:'private-test',APP_ORIGIN:'https://finora.test'};
+const fetcher=async(url,opts)=>{calls.push({url,opts});
+ if(url.includes('/recover'))return Response.json({}, {status:mailLimited?429:200});
+ if(url.endsWith('/user')&&opts.method==='PUT')return Response.json({id:'11111111-1111-4111-8111-111111111111'});
+ if(url.endsWith('/user'))return Response.json(expired?{}:{id:'11111111-1111-4111-8111-111111111111',email:'owner@example.test',email_confirmed_at:'2026-10-18'}, {status:expired?401:200});
+ if(url.includes('/logout'))return new Response(null,{status:204});
+ throw Error('Unexpected financial/database operation');
+};
+const handle=createRenderHandler(env,{fetcher,worker:{fetch:()=>Response.json({fallback:true})}});
+const request=(path,body,origin='https://finora.test')=>handle(new Request('https://finora.test'+path,{method:body?'POST':'GET',headers:body?{origin,'content-type':'application/json'}:{},...(body?{body:JSON.stringify(body)}:{})}));
+let r=await request('/reset-password');assert.match(r.headers.get('content-type'),/text\/html/,'recovery must have a real page');assert.match(await r.text(),/password-recovery\.js/);
+r=await request('/password-recovery.js');assert.match(r.headers.get('content-type'),/javascript/);const js=await r.text();assert.match(js,/replaceState/);assert.doesNotMatch(js,/private-test|sb_secret_/);
+assert.equal((await request('/api/password-recovery',{email:'owner@example.test'},'https://evil.test')).status,403);assert.equal(calls.length,0);
+r=await request('/api/password-recovery',{email:'owner@example.test',lang:'en'});assert.equal(r.status,200);assert.equal((await r.json()).ok,true);
+const mail=calls.at(-1);assert.match(mail.url,/\/auth\/v1\/recover\?/);assert.equal(new URL(mail.url).searchParams.get('redirect_to'),'https://finora.test/reset-password?lang=en');assert.equal(new Headers(mail.opts.headers).get('apikey'),'public-test');
+assert.equal((await request('/api/password-reset',{password:'long-new-password'})).status,400);
+assert.equal((await request('/api/password-reset',{token:'proof',password:'short'})).status,400);
+expired=true;assert.equal((await request('/api/password-reset',{token:'proof',password:'long-new-password'})).status,401);assert.equal(calls.filter(x=>x.opts.method==='PUT').length,0);
+expired=false;r=await request('/api/password-reset',{token:'proof',password:'long-new-password'});assert.equal(r.status,200);assert.equal((await r.json()).ok,true);assert.equal(calls.filter(x=>x.opts.method==='PUT').length,1);assert.equal(new Headers(calls.find(x=>x.opts.method==='PUT').opts.headers).get('authorization'),'Bearer proof');
+assert.equal(calls.some(x=>x.url.includes('/rpc/')),false);assert.ok(r.headers.getSetCookie().every(x=>x.includes('Max-Age=0')));
+mailLimited=true;assert.equal((await request('/api/password-recovery',{email:'other@example.test'})).status,429);
+for(let n=0;n<4;n++)r=await request('/api/password-recovery',{email:'owner@example.test'});assert.equal(r.status,429);
+console.log('Password recovery page, private proof, origin guard, validation, rate limits and no ledger writes passed');
+
+// Exercise real recovery browser script with a minimal DOM; no browser layout claim.
+function browser(hash,fetcher){const elements=new Map(),requests=[],history=[];const el=id=>{if(!elements.has(id))elements.set(id,{value:'',textContent:'',hidden:false,disabled:false,required:false,handlers:{},addEventListener(event,fn){this.handlers[event]=fn;},focus(){this.focused=true;}});return elements.get(id);};
+ const context={URLSearchParams,document:{getElementById:el,documentElement:{}},location:{hash,pathname:'/reset-password',search:'?lang=en'},history:{replaceState(...args){history.push(args);}},localStorage:{getItem(){return null;}},fetch:async(...args)=>{requests.push(args);return fetcher(...args);}};
+ vm.runInNewContext(recoveryJS,context);return {el,requests,history,submit:()=>el('recovery-form').handlers.submit({preventDefault(){}})};
+}
+let resolveRequest;
+const ui=browser('#access_token=secret-proof&refresh_token=secret-refresh&type=recovery',()=>new Promise(resolve=>{resolveRequest=resolve;}));
+assert.equal(ui.history.length,1);assert.equal(ui.history[0][2],'/reset-password?lang=en');assert.equal(ui.el('password-fields').hidden,false);assert.equal(ui.el('email').disabled,true);
+ui.el('password').value='new-long-password';ui.el('confirm').value='different';await ui.submit();assert.equal(ui.requests.length,0);
+ui.el('confirm').value='new-long-password';const pending=ui.submit();await ui.submit();assert.equal(ui.requests.length,1,'double submit must not repeat reset');assert.equal(JSON.parse(ui.requests[0][1].body).token,'secret-proof');
+resolveRequest(Response.json({ok:true}));await pending;assert.equal(ui.el('recovery-form').hidden,true);assert.equal(ui.el('password').value,'');assert.equal(ui.el('back').focused,true);
+const bad=browser('#access_token=bad&type=recovery',async()=>Response.json({error:'expired'},{status:401}));bad.el('password').value=bad.el('confirm').value='new-long-password';await bad.submit();assert.equal(bad.el('password-fields').hidden,true);assert.match(bad.el('message').textContent,/expired/);
+const missing=browser('',async()=>Response.json({ok:true}));assert.equal(missing.el('password-fields').hidden,true);missing.el('language').value='zh';missing.el('language').handlers.change();assert.equal(missing.el('title').textContent,'重设密码');assert.equal(missing.requests.length,0);
+console.log('Recovery DOM checks passed: fragment removal, language, mismatch, duplicate submission, expired link and success');

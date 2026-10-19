@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';
+const html=fs.readFileSync('src/index.html','utf8'),css=html.match(/<style>([\s\S]*?)<\/style>/)[1];
+const experience=fs.readFileSync('src/experience.css','utf8');
+const tokens=selector=>{const rule=css.match(selector)[1]+';'+experience.match(selector)[1];return Object.fromEntries([...rule.matchAll(/(--[\w-]+):\s*(#[\da-f]{6})/gi)].map(m=>[m[1],m[2]]));};
+assert.match(css,/:root\[data-theme="dark"\]/,'dark semantic palette must exist');
+const light=tokens(/:root\s*\{([^}]+)\}/),dark=tokens(/:root\[data-theme="dark"\]\s*\{([^}]+)\}/);
+const lum=h=>{const v=h.slice(1).match(/../g).map(x=>parseInt(x,16)/255).map(n=>n<=.04045?n/12.92:((n+.055)/1.055)**2.4);return v[0]*.2126+v[1]*.7152+v[2]*.0722;};
+const ratio=(a,b)=>{let x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
+for(const theme of [light,dark])for(const [fg,bg]of [['--text-primary','--bg-surface'],['--text-secondary','--bg-surface'],['--text-secondary','--bg-primary'],['--accent-color','--bg-surface'],['--status-danger','--danger-soft'],['--status-warning','--warning-soft'],['--status-positive','--positive-soft'],['--on-accent','--button-primary'],['--hero-text','--hero-start'],['--hero-muted','--hero-end']])assert.ok(ratio(theme[fg],theme[bg])>=4.5,`${fg}/${bg} contrast ${ratio(theme[fg],theme[bg])}`);
+for(const theme of [light,dark])for(const fg of ['--chart-primary','--chart-secondary'])assert.ok(ratio(theme[fg],theme['--bg-surface'])>=3);
+const withoutPalettes=(css+'\n'+experience).replace(/:root(?:\[data-theme="dark"\])?\s*\{[^}]*\}/g,'');assert.equal((withoutPalettes.match(/#[\da-f]{3,8}\b|\bwhite(?!-)\b|\bblack(?!-)\b/gi)||[]).length,0,'colors outside semantic palettes must use tokens');
+const boot=fs.readFileSync('src/theme-init.js','utf8');assert.match(boot,/let theme='light'/);assert.match(boot,/finora-appearance/);assert.match(html,/src="\/theme-init.js"/);
+console.log('PASS light/dark semantic token contrast pairs, chart contrast, no hardcoded CSS colors and prepaint light default');
