@@ -95,9 +95,15 @@ export function createRenderHandler(env,{worker,fetcher=fetch}={}){
     const minute=Math.floor(Date.now()/60000);if(minute!==limitMinute){limits.clear();limitMinute=minute;}
     const key='account:'+email.slice(0,120),n=(limits.get(key)||0)+1,total=(limits.get('total')||0)+1;limits.set(key,n);limits.set('total',total);
     if(n>8||total>120)return reply({error:'Try again later'},429);
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>120||typeof password!=='string'||password.length<12||password.length>128)return reply({error:'Invalid account details'},400);
-    const register=route==='/api/register',r=await upstream(register?'/auth/v1/signup':'/auth/v1/token?grant_type=password',{method:'POST',headers:authHeaders(),body:JSON.stringify({email,password})});
-    if(!r.ok)return reply({error:'Unable to sign in or register. Check account details or confirm your email.'},r.status===429?429:400);
+    const register=route==='/api/register';
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>120||typeof password!=='string'||password.length<(register?12:1)||password.length>128)return reply({error:'Invalid account details',code:'invalid_account_details'},400);
+    const r=await upstream(register?'/auth/v1/signup':'/auth/v1/token?grant_type=password',{method:'POST',headers:authHeaders(),body:JSON.stringify({email,password})});
+    if(!r.ok){
+     let upstreamCode='';try{upstreamCode=(await r.json()).code||'';}catch{}
+     const known=new Set(['invalid_credentials','email_not_confirmed','user_already_exists','signup_disabled','weak_password','email_address_not_authorized','over_email_send_rate_limit','over_request_rate_limit']);
+     const code=r.status===429?'rate_limited':known.has(upstreamCode)?upstreamCode:'auth_rejected';
+     return reply({error:'Authentication request rejected. Check the account details and email confirmation.',code},r.status===429?429:400);
+    }
     const tokens=await r.json();if(register&&!tokens.access_token)return reply({confirmationRequired:true});
     if(!tokens.access_token||!tokens.refresh_token)throw new UpstreamError();const user=await verifiedUser(tokens.access_token);if(!user)return reply({error:'Confirm your email before signing in.'},401);
     const csrf=randomBytes(24).toString('hex');set=cookiesFor(tokens,csrf);const info=await rpc(user,'list');if(info.status!==200)return reply({error:info.error||'Workspace unavailable'},info.status);
@@ -106,13 +112,18 @@ export function createRenderHandler(env,{worker,fetcher=fetch}={}){
    const needsIdentity=route.startsWith('/api/');const s=needsIdentity?await session(request):{user:null,set:[]};set=s.set;
    if(route==='/api/status')return reply({mode:env.LLM_API_KEY&&env.LLM_ENDPOINT&&env.LLM_MODEL?'configured':'demo',asOf:AS_OF,authenticated:!!s.user,accounts:true,documents:false,identityMode:'supabase',track:'E'});
    if(route==='/api/session'&&!s.user)return reply({user:null,accounts:true});
+   // Signing out remains possible after expiry and repeated calls are harmless.
+   // A valid signed-in session still requires its CSRF token.
+   if(route==='/api/logout'){
+    if(method!=='POST')return reply({error:'Method not allowed'},405);
+    if(s.user&&!same(request.headers.get('x-csrf-token'),s.csrf))return reply({error:'CSRF check failed'},403);
+    let sessionsRevoked=false;
+    if(s.user)try{const result=await upstream('/auth/v1/logout',{method:'POST',headers:{...authHeaders(),authorization:'Bearer '+s.access}});sessionsRevoked=result.ok||result.status===401;}catch{}
+    set=clearCookies();return reply({ok:true,sessionsRevoked});
+   }
    if(restricted.has(route)){
     if(!s.user)return reply({error:'Sign in required'},401);
     if(mutating&&!same(request.headers.get('x-csrf-token'),s.csrf))return reply({error:'CSRF check failed'},403);
-    if(route==='/api/logout'){
-     if(method!=='POST')return reply({error:'Method not allowed'},405);
-     const result=await upstream('/auth/v1/logout',{method:'POST',headers:{...authHeaders(),authorization:'Bearer '+s.access}});if(!result.ok&&result.status!==401)throw new UpstreamError();set=clearCookies();return reply({ok:true});
-    }
     const owner=url.searchParams.get('owner')||s.user.id,key=url.searchParams.get('key')||'shenzhen';
     if(!uuid(owner)||!profiles.some(p=>p.id===key))return reply({error:'Invalid workspace'},400);
     let action,values={p_owner:owner,p_key:key};
