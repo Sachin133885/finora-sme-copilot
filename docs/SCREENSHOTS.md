@@ -1,33 +1,35 @@
-# Final 1.2 screenshot capture checklist
+# Finora app screenshots
 
-## Status and provenance
+## Capture provenance
 
-No genuine final-version screenshots are included yet. On 19 October 2026, Playwright was available but no Chromium binary was installed; browser installation returned invalid/truncated download archives. No browser visual success is claimed. The README uses the existing dragon artwork, explicitly labeled decorative. Concept art, registration screenshots and the older deployed interface are not substitutes for final-source screenshots.
+Eight genuine browser captures were taken on **19 October 2026** from the user-supplied [Finora dragon preview](https://finora-dragon-preview.dncorleone1211.chatgpt.site/#overview). They use the synthetic **Shenzhen Bloom Commerce** business and fixed **13 October 2026** reporting snapshot. No private account or real customer data appears.
 
-## Capture these eight views
+The browser viewport was approximately 1363 × 936 or 1348 × 926 pixels. Each image preserves the full viewport height and crops away neutral margins around the centered app workspace. Crop widths vary slightly with screenshot scaling. These are desktop-browser captures of the responsive interface, not photographs or physical-device tests. No interface was recreated or generated for these images.
 
-Use the final source, synthetic Shenzhen business and the default fixed reporting snapshot. For local screenshots, run `npm run build` then `node scripts/local.mjs` and open http://localhost:3000. This requires no real account or AI secrets. A local demo screenshot does not verify Supabase behavior.
+The preview's deployed source commit and browser version were not exposed in the capture record. These captures document the observed preview and do not assert that it matches a particular repository commit or the Render deployment.
 
-| Filename under docs/screenshots/ | View and suggested README caption |
-| --- | --- |
-| `dashboard-desktop.png` | Home — recorded cash, upcoming obligations and the dragon identity. Desktop viewport 1440×1000. |
-| `record-desktop.png` | Record — choose income, expense, receipt or import, and inspect history before recording. 1440×1000. |
-| `pdf-receipt-review.png` | Supported text PDF preview — inspect editable fields and source evidence before explicit confirmation. 1440×1000. Use a provided synthetic fixture and stop before posting. |
-| `forecast-desktop.png` | Forecast — inspect the low point, reserve gap and current assumptions. 1440×1000. |
-| `cash-rescue-planner.png` | Cash Rescue Planner — compare hypothetical responses and their assumptions. 1440×1000. |
-| `assistant-desktop.png` | Assistant — show a labeled calculated answer/evidence with no live-key or account information. 1440×1000. |
-| `more-desktop.png` | More — five directory groups, category filters and tool search. 1440×1000. |
-| `dashboard-mobile.png` | Home at 390×844 — touch layout and bottom navigation. |
+## Included images
 
-## Exact manual procedure
+| File | Screen | Language and appearance |
+| --- | --- | --- |
+| [dashboard.jpg](screenshots/dashboard.jpg) | Home — Recorded cash and the spending estimate, shown in English. | English, light |
+| [record.jpg](screenshots/record.jpg) | Record — PDF receipts, income, expenses and statement imports. | English, light |
+| [forecast.jpg](screenshots/forecast.jpg) | Forecast — Projected cash, the low point and reserve gap. | English, light |
+| [assistant.jpg](screenshots/assistant.jpg) | Assistant — A labelled calculated answer with supporting figures. | English, light |
+| [pdf-receipt-review.jpg](screenshots/pdf-receipt-review.jpg) | Receipt review — Editable fields extracted from a synthetic text PDF, before posting. | English, light |
+| [collections.jpg](screenshots/collections.jpg) | Collections — Outstanding invoices and expected customer payments. | English, light |
+| [more.jpg](screenshots/more.jpg) | More tools — A searchable, categorized directory of business tools. | English, light |
+| [dashboard-dark.jpg](screenshots/dashboard-dark.jpg) | Chinese dark mode — The same synthetic business in Simplified Chinese and dark appearance. | Simplified Chinese, dark |
 
-1. Build the final source; serve it with the local demo script. Use a fresh/incognito browser profile. Never capture a private cloud workspace.
-2. Select English/light for the primary series. Dismiss welcome/tour deliberately. Keep snapshot/cash labels visible and use the same synthetic business in all views.
-3. Open developer tools → responsive/device mode. Set 1440×1000 for desktop, 390×844 for mobile. Wait for fonts/artwork to load and the brief motion to finish; use reduced motion when needed.
-4. Navigate through real tabs/More tools. Capture actual rendered controls using the browser’s screenshot function; do not recreate them in image generation software. Use one useful viewport or a carefully chosen full-page image, consistently.
-5. For PDF review, select one file from `tests/fixtures/receipts/` if that directory exists in your checkout; use the actual PDF fixture directory in `tests/pdf-fixtures.mjs` otherwise. Review the synthetic labels. Do not post just to obtain an image.
-6. Inspect every file at normal size: readable text, loaded fonts/assets, no clipped buttons, no debug panels and no secrets or personal account/payment data. Repeat a dark/Chinese view as a separate optional series.
-7. Save the PNGs using the filenames above. Add relative Markdown image links only after the files exist, with the captions above and descriptive alt text. For example: `![Finora Home showing synthetic cash and upcoming bills](docs/screenshots/dashboard-desktop.png)` from the root README.
-8. Record capture date, commit, viewport, language, theme, browser version and local/deployed origin in a companion manifest. If captured locally, label it local. If final code has not deployed, do not caption a live image as final 1.2.
+Machine-readable provenance, exact image sizes and hashes: [capture-manifest.json](screenshots/capture-manifest.json).
 
-The expected screenshot names are listed here as plain text, not broken image embeds. Root README image paths should be validated after adding images. A desktop responsive preview is not a physical-device test or proof of production auth/AI.
+## Workflow boundaries
+
+- The PDF review uses the supplied synthetic `receipt-02.pdf` fixture. Extraction finished and populated editable fields. No payment was posted to obtain the screenshot.
+- The Assistant screen explicitly labels its calculation fallback and unconfigured Gemini connection. It is not evidence of a successful live provider request.
+- Displayed amounts are synthetic planning examples, not verified bank balances, forecast guarantees or lending decisions.
+- Account permissions, cloud persistence, physical devices, mobile keyboards and animation timing require separate checks.
+
+## Refreshing this gallery
+
+Use the same synthetic business and reporting date. Navigate through the real tabs and More directory, wait for extraction and rendering to finish, and capture the visible interface. Stop before posting money or changing financial records. Inspect every image for readable controls and accidental personal data, then update the gallery, manifest and capture date together. Preserve language/theme labels and identify the actual local or hosted origin.

@@ -1,0 +1,78 @@
+{
+  "captured_on": "2026-10-19",
+  "source_url": "https://finora-dragon-preview.dncorleone1211.chatgpt.site/#overview",
+  "deployed_source_commit": null,
+  "browser_version": null,
+  "business": "Shenzhen Bloom Commerce",
+  "data_kind": "synthetic",
+  "reporting_snapshot": "2026-10-13",
+  "capture_method": "Browser viewport screenshot, cropped horizontally to the centered app workspace; no UI reconstruction.",
+  "physical_device_test": false,
+  "auth_sync_or_live_ai_verified": false,
+  "files": [
+    {
+      "path": "docs/screenshots/dashboard.jpg",
+      "width": 480,
+      "height": 936,
+      "sha256": "1c0e0fb2b20c68bd34fde8c9508e9c1097ef722019938d91a3e05038eba06539",
+      "language": "en",
+      "appearance": "light"
+    },
+    {
+      "path": "docs/screenshots/record.jpg",
+      "width": 475,
+      "height": 926,
+      "sha256": "80f312b252a8aa8b2a373c179f84cd9cca8b5e48de5e9cbcd7f3e43f1b59a4ff",
+      "language": "en",
+      "appearance": "light"
+    },
+    {
+      "path": "docs/screenshots/forecast.jpg",
+      "width": 475,
+      "height": 926,
+      "sha256": "1f11c33a39299aa5cb3584bc503acf334ca6f1868039055dfd1aaabef9d48205",
+      "language": "en",
+      "appearance": "light"
+    },
+    {
+      "path": "docs/screenshots/assistant.jpg",
+      "width": 480,
+      "height": 936,
+      "sha256": "6766ab68bbd218637b904f8455df982bd93ca7d2ff6b633f5b52fbb6a994af77",
+      "language": "en",
+      "appearance": "light"
+    },
+    {
+      "path": "docs/screenshots/pdf-receipt-review.jpg",
+      "width": 475,
+      "height": 926,
+      "sha256": "2de71947b33307b9ec5bbcf95fe481b988b48b9e4681645c30205a726c81074a",
+      "language": "en",
+      "appearance": "light"
+    },
+    {
+      "path": "docs/screenshots/collections.jpg",
+      "width": 475,
+      "height": 926,
+      "sha256": "174413de4bd0db482a458395be888d23b1cdb5d218c02f70f947006579fbb650",
+      "language": "en",
+      "appearance": "light"
+    },
+    {
+      "path": "docs/screenshots/more.jpg",
+      "width": 477,
+      "height": 926,
+      "sha256": "beb19f02c4fbe3b01dc709e04aa4c5936a537b07970cfb87ba462f8fe4de03c7",
+      "language": "en",
+      "appearance": "light"
+    },
+    {
+      "path": "docs/screenshots/dashboard-dark.jpg",
+      "width": 473,
+      "height": 926,
+      "sha256": "36d16992ec919eac5c458e2ae47ae42dd26bdcf90db8726a24f0f3c47f0505d0",
+      "language": "zh-CN",
+      "appearance": "dark"
+    }
+  ]
+}
