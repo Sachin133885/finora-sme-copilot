@@ -240,7 +240,6 @@ Names, roles and institution are taken from the team-supplied registration form.
 
 - OpenAI ChatGPT/Codex assisted with code/documentation preparation; optional runtime AI is configured separately. [Asset provenance](docs/ASSET_PROVENANCE_1.2.json) identifies the existing generated dragon artwork and sprite. Decorative assets are not interface evidence.
 - Mozilla PDF.js and local font license notices remain in `src/vendor/` and `src/fonts/`. Those notices do not license the entire Finora application.
-- The [Jomidarpan README](https://github.com/deepmitra2002/jomidarpan) informed documentation organization only. Its product content, metrics and screenshots are not reused as Finora claims.
 - **No project-wide license is specified in the supplied source.** No license has been selected automatically; obtain the team’s permission before reuse or redistribution beyond the intended submission/repository publication.
 - Contributions: discuss substantial changes first, keep credentials out of commits, preserve integer-fen and confirmation/permission boundaries, and run the existing suites. [Contribution guide](CONTRIBUTING.md).
 
