@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';import fs from 'node:fs';import {pathToFileURL} from 'node:url';import {installTourDOM} from './helpers/tour-dom.mjs';
-const dom=installTourDOM();Object.assign(globalThis,{location:{hash:'#account',protocol:'https:'},innerWidth:390});dom.storage.set('finora-lang','en');dom.storage.set('finora-welcome-v2:guest','seen');
+const dom=installTourDOM();Object.assign(globalThis,{location:{hash:'#account',protocol:'https:'},innerWidth:390});dom.storage.set('finora-lang','en');dom.storage.set('finora-welcome-v4:guest','seen');
 globalThis.FormData=class{constructor(f){this.vals=f.vals||{}}*[Symbol.iterator](){yield*Object.entries(this.vals)}};
 let pending=true,posts=[];
 globalThis.fetch=async(url,opts={})=>{posts.push({url,opts});if(url==='/api/status')return Response.json({accounts:true,identityMode:'supabase',authenticated:false,mode:'demo'});if(url==='/api/session')return Response.json({user:null});return Response.json(pending?{confirmationRequired:true}:{user:{id:'verified-user',email:'owner@example.test'},csrf:'test-csrf',businesses:[],accounts:true});};

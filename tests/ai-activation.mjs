@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';import fs from 'node:fs';import {pathToFileURL} from 'node:url';import {installTourDOM} from './helpers/tour-dom.mjs';
-const dom=installTourDOM();Object.assign(globalThis,{location:{hash:'#overview',protocol:'file:'},innerWidth:390});dom.storage.set('finora-lang','en');dom.storage.set('finora-welcome-v2:guest','seen');
+const dom=installTourDOM();Object.assign(globalThis,{location:{hash:'#overview',protocol:'file:'},innerWidth:390});dom.storage.set('finora-lang','en');dom.storage.set('finora-welcome-v4:guest','seen');
 const source=fs.readFileSync('src/app.js','utf8').replace(/from '\/(.*?)'/g,(_,f)=>'from '+JSON.stringify(pathToFileURL(process.cwd()+'/src/'+f).href))+`\nexport {render,ask};export const setAI=(s)=>{aiStatus=s;liveRequested=false;providerMode='demo';};export const inspectAI=()=>({liveRequested,data,aiStatus});`;
 const app=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
 const click=(action,extra={})=>{const n=document.createElement('button');n.dataset.action=action;for(const[k,v]of Object.entries(extra))n.dataset[k]=v;document.body.append(n);n.click();n.remove();};

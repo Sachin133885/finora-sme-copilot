@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';import fs from 'node:fs';import {pathToFileURL} from 'node:url';import {installTourDOM} from './helpers/tour-dom.mjs';
-const dom=installTourDOM();Object.assign(globalThis,{location:{hash:'#overview',protocol:'file:'},innerWidth:390});dom.storage.set('finora-lang','en');dom.storage.set('finora-welcome-v2:guest','seen');
+const dom=installTourDOM();Object.assign(globalThis,{location:{hash:'#overview',protocol:'file:'},innerWidth:390});dom.storage.set('finora-lang','en');dom.storage.set('finora-welcome-v4:guest','seen');
 globalThis.FormData=class{constructor(f){this.vals=f.vals||{}}*[Symbol.iterator](){yield*Object.entries(this.vals)}get(k){return this.vals[k]}};
 const source=fs.readFileSync('src/app.js','utf8').replace(/from '\/(.*?)'/g,(_,f)=>'from '+JSON.stringify(pathToFileURL(process.cwd()+'/src/'+f).href))+`\nexport const inspect=()=>({data,org,page,scenario});export const preview=fields=>{pdfDraft={fields,text:'Receipt evidence',context:pdfContext(),fileName:'sample.pdf',fileSize:2048};};export const role=r=>{accountState.user=r?{id:'test'}:null;accountState.role=r||'owner';};`;
 const app=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));

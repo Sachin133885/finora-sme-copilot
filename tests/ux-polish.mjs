@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';import fs from 'node:fs';import {pathToFileURL} from 'node:url';
 import {installTourDOM} from './helpers/tour-dom.mjs';
-const dom=installTourDOM();document.documentElement.style={};Object.assign(globalThis,{location:{hash:'#overview',protocol:'file:'},innerWidth:390});dom.storage.set('finora-lang','en');dom.storage.set('finora-welcome-v2:guest','seen');
+const dom=installTourDOM();document.documentElement.style={};Object.assign(globalThis,{location:{hash:'#overview',protocol:'file:'},innerWidth:390});dom.storage.set('finora-lang','en');dom.storage.set('finora-welcome-v4:guest','seen');
 const source=fs.readFileSync('src/app.js','utf8').replace(/from '\/(.*?)'/g,(_,file)=>'from '+JSON.stringify(pathToFileURL(process.cwd()+'/src/'+file).href))+`\nexport {openFinoraGuide,render};export const fallback=e=>showPdfFallback(e);export const state=()=>({data,org,page,scenario});export const setTestRole=r=>{accountState.user=r?{id:'test'}:null;accountState.role=r||'owner';};`;
 const app=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
 const click=(action,extra={})=>{const el=document.createElement('button');el.dataset.action=action;for(const [k,v]of Object.entries(extra))el.dataset[k]=v;document.body.append(el);el.click();el.remove();};
@@ -14,5 +14,5 @@ const upload=document.querySelector('#pdfreceiptfile');upload.files=[{name:'scan
 app.setTestRole('viewer');app.fallback(Error('unsupported'));assert.equal(document.querySelector('.modal [data-action="quickincome"]').disabled,true);click('quickincome');assert.equal(document.querySelector('#quickform'),null);click('closemodal');app.setTestRole(null);
 // Quick Start closes the welcome, restores the original route/draft and never reseeds data.
 app.openFinoraGuide('welcome');assert.match(document.querySelector('.guide-card').textContent,/Quick Start/);document.querySelector('[data-guide="exit"]').click();assert.equal(JSON.stringify(app.state()),before);
-click('language',{lang:'zh'});click('nav',{page:'settings'});assert.match(document.querySelector('#appearance').textContent,/跟随系统/);click('nav',{page:'overview'});assert.match(document.querySelector('.cash-shortfall').textContent,/预计现金缺口/);click('nav',{page:'pdfreceipts'});app.fallback(Error('unsupported'));assert.match(document.querySelector('.modal').textContent,/手动录入/);
+click('language',{lang:'zh'});click('nav',{page:'settings'});assert.match(document.querySelector('#appearance').textContent,/浅色 · 默认/);click('nav',{page:'overview'});assert.match(document.querySelector('.cash-shortfall').textContent,/预计现金缺口/);click('nav',{page:'pdfreceipts'});app.fallback(Error('unsupported'));assert.match(document.querySelector('.modal').textContent,/手动录入/);
 console.log('PASS bilingual navigation, cash gauge, theme setting without ledger mutation, checklist, WeChat draft, manual PDF fallback, viewer guard and Quick Start (simulated DOM)');

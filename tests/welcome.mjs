@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';import fs from 'node:fs';import {pathToF
 import {installTourDOM} from './helpers/tour-dom.mjs';import {welcomeSeen} from '../src/tour.js';
 const source=fs.readFileSync('src/app.js','utf8').replace(/from '\/(.*?)'/g,(_,file)=>'from '+JSON.stringify(pathToFileURL(process.cwd()+'/src/'+file).href))+'\nexport {openFinoraGuide}; export const guide=()=>tourRuntime.instance;';
 async function run({seen=false,focused=false,user='first-user',lang='en',run=0}={}){
- const dom=installTourDOM();Object.assign(globalThis,{location:{hash:'#overview',protocol:'https:'},innerWidth:390});dom.storage.set('finora-lang',lang);if(seen)dom.storage.set('finora-welcome-v2:'+user,'seen');
+ const dom=installTourDOM();Object.assign(globalThis,{location:{hash:'#overview',protocol:'https:'},innerWidth:390});dom.storage.set('finora-lang',lang);if(seen)dom.storage.set('finora-welcome-v4:'+user,'seen');
  globalThis.fetch=async url=>new Response(JSON.stringify(url==='/api/status'?{accounts:true,identityMode:'chatgpt',mode:'demo'}:{user:{id:user,email:'test@example.test'},businesses:[]}));
  if(focused)dom.document.querySelector('#unsaved').focus();else dom.document.activeElement=dom.document.body;
  const app=await import('data:text/javascript;base64,'+Buffer.from(source+'\n// run '+run).toString('base64'));await new Promise(r=>setTimeout(r,20));return {dom,app};
