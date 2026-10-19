@@ -61,3 +61,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 /* Hold the same sprite identity and baseline after the walking cycle. */
 .dragon-still{inset:0;background-image:var(--dragon-walk-art);background-size:300% 200%;background-position:100% 100%;background-repeat:no-repeat}.dragon-still>.dragon-hero{visibility:hidden}
 @media(prefers-reduced-motion:reduce){.dragon-still{background-image:none}.dragon-still>.dragon-hero{visibility:visible}}
+
+/* Activation stays visible on Assistant; privacy remains an optional disclosure. */
+.assistant-ai-bar{flex-shrink:0;padding:10px 18px;background:var(--bg-surface);border-bottom:1px solid var(--border-color)}
+.assistant-ai-bar .ai-activation{margin:0;padding:0;border:0;border-radius:0;background:transparent;font-size:14px;line-height:1.5}.assistant-ai-bar .btn{min-height:44px}.assistant-ai-bar p{margin:0 0 6px}
