@@ -1,127 +1,247 @@
-# Finora Render and Supabase migration candidate
+<p align="center"><img src="docs/branding/finora-dragon.png" width="260" alt="Finora’s red dragon brand artwork"></p>
+<h1 align="center">Finora · 融财</h1>
+<p align="center"><strong>Your SME finance copilot.</strong><br>Understand your cash. Explore your options. Decide with confidence.</p>
+<p align="center">
+<img alt="Source version 1.2.0" src="https://img.shields.io/badge/source-1.2.0-A9322B">
+<img alt="Runtime Node.js 24" src="https://img.shields.io/badge/Node.js-24-28734A">
+<img alt="Interface English and Simplified Chinese" src="https://img.shields.io/badge/interface-EN%20%2F%20简体中文-C25A25">
+<img alt="Competition Topic E SME Finance Copilot" src="https://img.shields.io/badge/competition-Topic%20E-8C2427">
+</p>
+<p align="center"><a href="https://finora-sme-copilot.onrender.com"><strong>Live application ↗</strong></a> · <a href="#quick-start">Quick start</a> · <a href="docs/USER_GUIDE.md">User guide</a> · <a href="docs/SCREENSHOTS.md">Screenshot guide</a> · <a href="docs/ARCHITECTURE.md">Architecture</a> · <a href="#team">Team</a></p>
 
-Topic E SME Finance Copilot. This candidate adds verified Supabase login and persistent role-controlled workspaces to the complete existing app. It is prepared for Render Free, with an optional Vercel static frontend after the backend is verified.
+**Finora helps small business owners record payments, anticipate cash pressure and compare possible responses before making a decision.** It combines a deterministic financial engine, reviewed document entry and an optional AI explanation layer in an English/Simplified Chinese interface.
 
-**Start with [the setup guide](docs/RENDER_SETUP.md).** The SQL file is `supabase/finora.sql`. Render build: `npm install --omit=dev --package-lock=false && npm run build`. Render start: `npm start`. Enter actual Supabase keys only in Render Environment settings. No runtime secrets are in this repository.
+Built by **The Fantastic Five**, Daffodil International University, for the **2026 Shenzhen International FinTech Competition (FinTechathon), International Track — Topic E: SME Finance Copilot**. The published competition theme is **“AI as a Financial Participant.”** This describes the project’s intended entry, not organizer endorsement or a finalist/award claim. [Competition and sources](docs/COMPETITION.md).
 
-This source has passed 30 local regression suites and isolated PostgreSQL-compatible SQL integration tests. It has not been deployed to Render/Vercel or connected to the user's actual Supabase Auth/database/provider during preparation. It does not automatically transfer the original Site's accounts or records. Keep the original app and backups until migration is verified.
+> **Source versus deployment:** this repository package contains the final **1.2 Vermilion & Ivory** source. The live URL is the existing Render application; deployment of this exact source must be confirmed after upload. The screenshot above is **brand artwork**, not a screen capture. Sample records use the fixed **13 October 2026** snapshot, not a verified bank balance.
 
-The financial engine, receipt logic, rescue algorithm and tour modules are unchanged. English/Chinese UI and all existing workspaces remain. Login uses Supabase on this deployment; the original Site retains its own sign-in system. Authentication, data-store and hosting sections below are historical baseline documentation and are superseded by the setup guide for this candidate.
+[Problem](#the-problem) · [Features](#features) · [Screenshots](#screenshots) · [Workflow](#how-to-use-finora) · [Stack](#technology-and-architecture) · [Setup](#quick-start) · [Configuration](#configuration) · [Tests](#testing-and-validation) · [Deployment](#deployment) · [Limits](#limitations-and-roadmap)
 
-## Original Site baseline documentation
+## The problem
 
-# Finora — SME Finance Copilot
+An SME owner can have cash today and still struggle to pay a supplier next week. Customer payments arrive late, obligations sit in separate records and a proposed loan may solve one deadline while adding another cost. A balance alone does not explain what happens next.
 
-**2026 Shenzhen International FinTech Competition · Topic E**
+Finora brings recorded money, customer invoices, supplier bills and forecast assumptions into a shared review workflow. Owners can see the lowest expected balance, preserve an emergency buffer, stress a customer delay and compare collections, supplier timing and hypothetical financing.
 
-Finora helps SME owners record money, review receipts, reconcile entries, understand cash pressure and compare possible responses. It supports English and Simplified Chinese, a mobile-first interface, Light/Dark/System appearance, and reviewed financial actions.
+**A typical story:** a Shenzhen shop owner reviews an unpaid customer invoice and an upcoming supplier bill. They upload a supported receipt, correct the extracted fields and confirm that payment occurred before posting. Next, they test a seven-day customer delay in Forecast, compare a supplier deferral in Cash Rescue Planner and save a Decision Receipt explaining the assumptions. None of these planning steps sends a payment, secures a loan or contacts the supplier.
 
-**Working public application:** https://finora-sme-copilot.bravehare4.chatgpt.site/
+## Features
 
-Prepared on 18 October 2026 from deployed-source commit `522435c6b9b48fdc3f6b5622a2eb02b4b8993f7a` (Site version 10). Submission documentation, an ignore file and a test workflow were added separately. Application source is unchanged. See `SUBMISSION.json` and `SHA256SUMS.txt` for provenance and integrity.
+| Feature | What it does | User benefit |
+| --- | --- | --- |
+| Recorded cash and safe-to-spend | Separates recorded cash, projected lows and the owner’s emergency buffer | Understand additional spending room and its assumptions |
+| Record money | Reviews income/expense entries, history and permitted correction/reversal actions | Keep an understandable ledger |
+| PDF receipts | Extracts supported text PDFs locally with editable fields, evidence and explicit paid/posting confirmation | Reduce retyping while retaining control |
+| Invoice settlement | Links confirmed payments to existing invoice/bill settlement logic | Update outstanding balances without recording cash twice |
+| Statements and reconciliation | Parses supported WeChat/Alipay/bank CSV structures, reviews exceptions and matches records | Find mismatches before committing |
+| Collections | Prioritizes overdue invoices and prepares reminder drafts | Plan follow-up without automatically sending messages |
+| Forecast | Models supported 30/60/90-day scenarios with payment timing and cost assumptions | Explore future pressure without changing actual payments |
+| Cash Rescue Planner | Evaluates a bounded grid of collection, supplier-delay and hypothetical funding options | Compare feasible responses with visible tradeoffs |
+| Decision Receipts | Saves planning evidence, assumptions and the selected comparison | Revisit why a decision was considered |
+| Reports, confidence and risk | Shows supporting records, missing information and financial warning indicators | Inspect evidence rather than accept an unexplained score |
+| Account and cloud workspaces | Supabase-backed owner/accountant/viewer permissions, business isolation and revision checks | Collaborate within permitted workspaces |
+| Optional AI copilot | Selects read-only financial tools and explains calculated evidence after separate consent | Ask business questions without delegating financial actions |
+| Bilingual interface and guidance | English/Simplified Chinese, welcome, chaptered spotlight guide and responsive navigation | Learn the app at your own pace |
+| Vermilion & Ivory design | Red/orange identity, local fonts, light/dark preference and reduced-motion dragon artwork | Maintain a consistent readable interface |
 
-## Run a local demonstration
+**Important boundaries:** receipt extraction is not official fapiao verification. CSV support is file import, not a live WeChat/Alipay/bank integration. Financing is hypothetical comparison, not a lender approval or application. The latest source defaults to **light**, with an explicitly saved dark preference; it does not automatically follow the OS theme.
 
-Install **Node.js 24**. No npm installation is needed: the app uses browser APIs, Node built-ins and vendored PDF.js assets.
+## Screenshots
 
-Unzip the submission, open a terminal in `Finora-Source`, then run:
+Genuine screenshots of the final 1.2 interface are **not yet available** in this package. Browser capture was attempted during this documentation update, but no Chromium binary was installed and its download failed. Existing concept images and older-version captures are not substituted for the final application.
+
+[The capture checklist](docs/SCREENSHOTS.md) specifies eight useful desktop/mobile screens, exact filenames, captions and privacy checks. It also distinguishes a local synthetic-data capture from proof of deployed authentication or live AI. No missing screenshot files are embedded in this README.
+
+## How to use Finora
+
+1. **Open Home.** Choose the intended business and language. Check recorded cash, the snapshot date, upcoming obligations and the emergency buffer explanation.
+2. **Use Record.** Choose money received, money spent, PDF receipt or statement import. Review extracted/imported values and confirm the intended posting; uploading a document alone does not establish payment.
+3. **Check invoices and reconciliation.** Open the relevant tool in More. Settle existing invoices through their settlement workflow and inspect unmatched statement items.
+4. **Open Forecast.** Choose a horizon, inspect the lowest point and test payment delays or costs. Scenario changes affect projections, not the recorded ledger.
+5. **Compare a response.** Use Cash Rescue Planner or Compare your options. Review assumptions, constraints and stressed results, then optionally save a Decision Receipt.
+6. **Ask Assistant.** Inspect calculated evidence. Live provider calls require server configuration, authentication and explicit consent; calculation-based responses are separately labeled.
+7. **Use Account and Settings & data.** Check your role and synchronization state. Export a backup before deliberate migration/import, and review the target business before saving.
+
+### Navigation map
+
+| Main tab | Purpose |
+| --- | --- |
+| **Home** | Cash overview, pressure, upcoming obligations and key entry points |
+| **Record** | Income, expenses, PDF intake, statement entry points and transaction history |
+| **Forecast** | Expected future cash, scenario assumptions and comparison controls |
+| **Assistant** | Questions, calculated evidence, privacy and optional provider connection |
+| **More** | Searchable, categorized directory of twenty tools |
+
+More groups the actual tools into **Records & documents**, **Payments & spending**, **Planning & decisions**, **Insights & assurance**, and **Business & settings**. [Full workspace guide](docs/USER_GUIDE.md).
+
+## Technology and architecture
+
+| Layer | Verified implementation |
+| --- | --- |
+| Interface | Vanilla JavaScript ES modules, HTML and CSS; no React/Vue requirement |
+| Financial core | Shared JavaScript modules with integer-fen amounts and deterministic validation/calculation |
+| PDF receipts | Locally bundled PDF.js and the supported labeled receipt parser |
+| Production server | Node.js **24.x** HTTP server and `createRenderHandler` adapter |
+| Identity | Supabase Auth, verified server-side identity, protected cookies and explicit role membership |
+| Cloud records | Supabase PostgreSQL private schema and service-only `finora_workspace` RPC |
+| Optional AI | Configurable HTTPS Chat Completions-compatible endpoint, server-only key and tool-capable model; Gemini can be configured |
+| Test tooling | Node assertions, simulated DOM/HTTP/upstream services; PGlite for isolated SQL checks |
+| Visual assets | Local Source Han Sans SC / Source Sans 3 fonts, team-supplied generated dragon assets and original vector UI |
+| Build | Custom Node scripts compile a self-contained Worker core used by the Render adapter; separate static/offline exports |
+
+```mermaid
+flowchart TD
+    UI["Browser: review records and PDF fields"] --> API["Render: identity, permissions and API"]
+    UI --> PDF["Local PDF.js extraction"]
+    API --> AUTH["Supabase Auth"]
+    API --> DB["Private PostgreSQL workspace RPC"]
+    API --> ENGINE["Deterministic financial engine"]
+    ENGINE --> AI["Optional provider explanation after consent"]
+    AI --> API
+```
+
+The browser reviews user inputs. Render verifies identity, validates requests and enforces workspace membership through the private RPC. The engine owns financial calculations; the LLM cannot write transactions, settle invoices, send reminders or apply a rescue plan. Live questions may send the question, up to four previous questions, reviewed assumptions and calculated context to the configured provider. Do not put private identifiers in questions. A provider failure can fall back to labeled calculated analysis.
+
+Safe-to-spend is a planning estimate: `max(0, min(current cash, lowest forecast cash − emergency buffer))`. The buffer is the owner’s desired preserved amount, not an extra bank deduction. If the opening balance is the forecast’s lowest point, equal current and minimum cash can be correct. [Calculation and security boundaries](docs/ARCHITECTURE.md).
+
+## Quick start
+
+### Option A — offline exploration, no credentials
+
+Download **`Finora-mobile.html`** and open it in a modern browser. It embeds the current interface, fonts, artwork and local financial workflows. This is the simplest way to explore synthetic examples; it is **not** a test of Supabase accounts, hosted synchronization or live AI. Browser file/storage restrictions can vary.
+
+### Option B — developer demo server, no cloud credentials
+
+Prerequisites: **Node.js 24.x** and npm.
 
 ```sh
-node scripts/compile.mjs
+git clone https://github.com/Sachin133885/finora-sme-copilot.git
+cd finora-sme-copilot
+npm install --include=dev --package-lock=false
+npm run build
 node scripts/local.mjs
 ```
 
-Open **http://localhost:3000/**. Stop with Ctrl+C. Keep this development server local; it is not a production authentication gateway.
+Open **http://localhost:3000**. This script serves the compiled Worker core with local synthetic browser records; it does not emulate the production Supabase account adapter. Stop it before starting another server on port 3000. Do not set AI keys for a basic offline/local demo.
 
-Local mode demonstrates browser-local synthetic records, manual/PDF entry, forecasting, planning, bilingual UI and guided tours. It does not reproduce hosted ChatGPT sign-in or the D1 cloud binding. Keep AI credentials unset for the local demonstration; calculation-based responses remain available. The fixed synthetic reporting date is **2026-10-13**, not a live bank date.
+### Option C — production-style Render/Supabase server
 
-`.env.example` documents optional server settings. These scripts do not automatically load a `.env` file. Never put actual keys into source or browser code.
+1. Use an authorized Supabase project; run [`supabase/finora.sql`](supabase/finora.sql) in SQL Editor. Keep its private schema and service-only RPC private.
+2. Configure the variables below in your shell or hosting secret manager. Node does not automatically load `.env` in these scripts. Keep actual credentials out of GitHub.
+3. For local development only, use `APP_ORIGIN=http://localhost:3000` and `FINORA_LOCAL=1`; Supabase’s URL remains HTTPS.
+4. Run `npm run build`, then `npm start`. Open **http://localhost:3000**. Supabase-backed auth requires network connectivity and actual authorized configuration.
+5. On Render, use the service’s HTTPS origin and leave `FINORA_LOCAL` unset. Keep existing secrets during updates.
 
-## Build and test
+This flow does not automatically transfer the earlier ChatGPT Site’s identities or D1 records. Cloud workspace initialization/import is explicit. [Current setup details](docs/SETUP.md).
 
-Run these commands in order:
+## Configuration
+
+| Variable | Purpose | Requirement |
+| --- | --- | --- |
+| `SUPABASE_URL` | Authorized project’s HTTPS API origin | Required by Render adapter |
+| `SUPABASE_PUBLISHABLE_KEY` | Supabase Auth requests from the server | Required by Render adapter |
+| `SUPABASE_SECRET_KEY` | Service-only workspace RPC | **Required; secret, server-only** |
+| `APP_ORIGIN` | Exact app origin for origin checks | Required locally; optional on Render when its URL variable is supplied |
+| `RENDER_EXTERNAL_URL` | Render-provided service origin | Used if `APP_ORIGIN` is absent |
+| `PORT` | HTTP listening port | Defaults to `3000`; supplied by Render |
+| `FINORA_LOCAL` | Enables localhost development cookie/origin behavior | `1` locally only; never production |
+| `FRONTEND_ORIGIN` | Additional exact HTTPS frontend origin | Optional; only for an intentionally configured frontend |
+| `LLM_API_KEY` | Provider credential | Optional; **secret, server-only** |
+| `LLM_ENDPOINT` | HTTPS Chat Completions URL | Required only for live AI |
+| `LLM_MODEL` | Tool-capable model available to the provider account | Required only for live AI |
+
+Example values in `.env.render.example` and `.env.example` are templates, not active configuration. The latter also contains variables for a separate legacy SQLite/OCR server; those are not required by the current Render adapter. Never put a service key or AI key in HTML, client JavaScript, screenshots or a public issue.
+
+## Project structure
+
+| Path | Responsibility |
+| --- | --- |
+| `src/index.html`, `src/app.js`, `src/experience.css` | Main interface, navigation, forms and 1.2 visual design |
+| `src/engine.js`, `src/mobile-engine.js` | Money validation, forecasting, statements and supporting calculations |
+| `src/rescue.js`, `src/readiness.js` | Bounded rescue comparisons, Decision Receipts and evidence/confidence |
+| `src/business-ai.js`, `src/server.js` | Read-only analysis and reusable Worker API core |
+| `src/render-adapter.mjs`, `scripts/render-server.mjs` | Current Supabase-backed production adapter and Node server |
+| `src/password-recovery.mjs` | Bilingual password-recovery page and client logic |
+| `src/pdf-receipts.js`, `src/vendor/` | Supported PDF extraction and bundled PDF.js |
+| `src/tour.js`, `src/theme-init.js`, `src/typography.js` | Guided tour, saved theme preference and bilingual typography |
+| `src/assets/`, `src/fonts/` | Dragon artwork, sprite, local fonts and third-party notices |
+| `supabase/finora.sql` | Private cloud workspace schema and RPC |
+| `tests/`, `tests/fixtures/` | Regression suites and synthetic receipt fixtures |
+| `scripts/` | Compilation, static/offline export and local/host adapters |
+| `Finora-mobile.html`, `Finora-Dragon-Motion.html` | Offline app and isolated decorative-motion demonstration |
+| `docs/` | Current guides, release notes and retained historical documentation |
+| `.github/workflows/tests.yml` | Node 24 regression workflow on pushes and pull requests |
+| `.openai/`, `drizzle/` | Retained legacy Sites/D1 identity and migration metadata |
+
+Generated `dist/`, `worker/` and `public/` are reproducible build outputs. The legacy `scripts/serve.mjs` SQLite/Poppler/Tesseract path is distinct from the current Render backend; its server OCR support must not be advertised as deployed receipt OCR.
+
+## Testing and validation
 
 ```sh
-node scripts/compile.mjs
+npm install --include=dev --package-lock=false
+npm run build
 node scripts/standalone.mjs
-node scripts/test.mjs
+node scripts/dragon-demo.mjs
+npm test
 node scripts/validate-artifact.mjs
 ```
 
-The suites cover financial arithmetic, invoice settlement, accounts/permissions, cloud conflicts, imports, PDF extraction/posting, planning, AI fallback/activation, appearance, typography, navigation and onboarding. PDF fixture tests run the actual PDF.js extractor on all ten sample receipts.
+**Documentation refresh run, 19 October 2026:** all **33/33 local regression suites passed** against this supplied 1.2 source, and Worker/offline/motion builds completed. This is a recorded local run, not a claim that the GitHub Actions badge is green or that production is fully verified. [Verification record](docs/REPOSITORY_VERIFICATION.md).
 
-Automated DOM harnesses are not real browser/mobile visual tests. Mock AI providers are not proof of a live connection. See `docs/VERIFICATION.md` for this package's results.
+Coverage includes financial arithmetic, PDF fixtures/review/duplicates, settlements, business isolation, permissions, API/account flows, recovery, mocked Supabase services, isolated SQL, tours, bilingual rendering and the latest redesign. Tests use simulated DOM geometry; they do not prove real mobile rendering, keyboard behavior or animation quality. Live Gemini, deployed roles, email delivery and cross-device durability require separate authenticated checks.
 
-## Main workflows
+## Deployment
 
-| Workspace | Purpose |
+The intended current host is **Render + Supabase**. GitHub stores source; Render deploys it when an authorized service tracks the branch and automatic deployment is enabled.
+
+| Render setting | Value |
 | --- | --- |
-| Home | Recorded cash, reporting snapshot, safe-to-spend and upcoming pressure |
-| Record | Money received/spent and transaction history |
-| Forecast | Projected daily cash and reviewed scenario assumptions |
-| Assistant | Financial questions, calculated evidence and optional consented live AI |
-| More | Documents, payments, planning, reports, business and account tools |
+| Branch | `main` |
+| Root directory | Repository root / blank |
+| Runtime | Node.js 24.x |
+| Build command | `npm install --omit=dev --package-lock=false && npm run build` |
+| Start command | `npm start` |
+| Health check | `/healthz` |
 
-More exposes PDF receipts, statement imports, invoice evidence, reconciliation, invoices/bills, collections, recurring expenses, financing, Cash Rescue Planner, action plans, weekly priorities, options comparison, AI setup, reports, forecast confidence/evidence, Decision Receipts, risk, business setup, accounts and Settings & Data. Actions depend on permissions.
+Preserve existing environment variables, Supabase project, schema and records. Do not rerun imports or initialize data merely to update documentation/UI. If automatic deployment is disabled, use **Manual Deploy → Deploy latest commit**. Confirm the deployment’s commit and test `/healthz`, `/api/status`, signup/login, a reviewed receipt and forecast behavior. Never treat `mode: configured` as proof of a successful live model response.
 
-### PDF receipts
+Render Free can have a startup delay after inactivity; free service/database/provider limits apply. No Vercel deployment or paid-service purchase is included. [`docs/RENDER_SETUP.md`](docs/RENDER_SETUP.md) is preserved as historical migration guidance; newer setup/recovery notes supersede its earlier pending-deployment and missing-reset statements.
 
-Use the receipt upload entry point in Record or More. Select a supported text-based PDF, inspect/edit extracted fields and source evidence, confirm payment occurred, then approve posting. Uploading alone does not change cash. Duplicate receipt identities or matching transaction details are blocked. Linked invoices use settlement logic so money is not counted twice.
+## Limitations and roadmap
 
-Ten selectable-text synthetic receipt PDFs and expected results are in `tests/fixtures/receipts/`. Read its `README.txt` before posting. They use business ID `shenzhen` and dates compatible with the fixed reporting snapshot. Receipt 01 references `INV-1042`; it is valid only if the current invoice still matches and has sufficient outstanding balance. Image-only PDFs need manual entry. Extraction is not official fapiao/authenticity verification.
-
-### Forecast and safe-to-spend
-
-Amounts are integer fen internally. The planning estimate is:
-
-```text
-max(0, min(recorded cash, lowest 30-day forecast cash - emergency buffer))
-```
-
-The buffer is cash the owner wants to preserve, not a posted expense. Forecasts include the opening point, expected collections, scheduled obligations and daily averages. They are estimates, not guarantees. Avoid entering the same obligation as both a bill and recurring cost.
-
-### Rescue planning and evidence
-
-The rescue planner evaluates a bounded set of collection portions, supplier delays and hypothetical borrowing amounts. It shows evaluated/feasible counts, costs and a seven-day late-collections stress test. A selected plan does not send messages, change invoices, pay bills or obtain a loan. Saving a Decision Receipt retains an explicitly confirmed planning snapshot without changing cash. It is not an immutable audit or lender decision.
-
-## Architecture and source map
-
-| Path | Role |
+| Current boundary | Planned or recommended next work |
 | --- | --- |
-| `src/index.html`, `src/app.js` | UI shell, semantic design tokens, workflows and state |
-| `src/engine.js`, `src/mobile-engine.js` | Integer-fen ledger, forecasts, safe-to-spend and imports |
-| `src/pdf-receipts.js`, `src/vendor/` | Browser PDF extraction, review validation and posting |
-| `src/rescue.js`, `src/readiness.js` | Rescue comparison, evidence and planning support |
-| `src/business-ai.js` | Validated read-only financial tools and optional provider explanations |
-| `src/server.js`, `src/cloud-accounts.js` | Worker HTTP routes, hosted identity and D1 authorization |
-| `src/tour.js`, `src/typography.js`, `src/theme-init.js` | Bilingual tours, font handling and appearance |
-| `src/fonts/` | Subsetted local fonts and third-party licenses |
-| `drizzle/` | Schema-only D1 migrations; no production database dump |
-| `scripts/`, `tests/` | Build, local development, regression tests and synthetic fixtures |
-| `dist/server/index.js`, `worker/index.js` | Generated Worker artifacts; regenerate from `src/` |
-| `Finora-mobile.html` | Generated offline demonstration, not a cloud client |
-| `reference-briefs/`, `Finora-updated.html` | Historical references, not the current entry point |
+| Fixed synthetic snapshot, CNY-only records | Evaluate reporting-date configuration and additional currencies without changing fen assumptions blindly |
+| Supported text PDFs, no general scanned-receipt OCR | Evaluate reviewed OCR on an independently labeled, permitted corpus |
+| CSV import rather than bank connectivity | Explore authorized integrations and reconciliation coverage |
+| Bounded planner grid, no guaranteed optimum | Broaden constraints, uncertainty and explainable comparisons |
+| Optional provider, no measured AI-answer accuracy | Evaluate tool selection, grounded explanations and failure cases |
+| Local regression evidence, no independent audit/load test | Run authenticated end-to-end, role, device, concurrency and recovery checks |
+| Final screenshot/browser animation review pending | Capture the eight documented screens and inspect actual devices |
+| Free-host startup delays and email quotas | Establish operating expectations, suitable SMTP and recovery procedures |
 
-## Hosting, accounts and AI
+This prototype is not a bank, payment processor, official fapiao verifier, autonomous financial manager or guarantee that spending is safe.
 
-The public app runs as a Worker with D1 binding `DB` and a platform-managed identity gateway. Guest data stays in the browser. Signing in and explicitly opening cloud workspaces accesses owner-isolated records. Owners manage accountant/viewer grants; server routes enforce permissions and reject stale-revision writes.
+## Team
 
-Live AI uses server-only `LLM_API_KEY`, `LLM_ENDPOINT` and `LLM_MODEL`, authenticated access and explicit consent. Native Gemini `generateContent` and compatible Chat Completions are supported. The code computes amounts; the provider explains reviewed context. Failures return a labeled calculation-based fallback. Never publish keys or include private document contents in questions.
+**The Fantastic Five · Daffodil International University, Bangladesh**
 
-**GitHub hosts the source; the existing Site hosts the full app.** GitHub Pages is static hosting and cannot directly run this Worker/D1/identity backend. Migration requires secure identity adaptation, data migration, runtime secrets and full regression testing. Never trust visitor-supplied identity headers on a replacement public host. See `docs/DEPLOYMENT.md`.
+| Member | Registered role | Study area |
+| --- | --- | --- |
+| Sachin Sarker | Team leader | Artificial Intelligence |
+| Deep Mitra | Member | Network and Communication |
+| Tammam Ibn Aman | Member | Artificial Intelligence |
+| Nafiew Islam | Member | Artificial Intelligence |
+| Marzan Sami Bin Tazim | Member | Artificial Intelligence |
 
-The optional `scripts/serve.mjs` / `src/accounts.mjs` SQLite/password server is retained as development code. It is a different account store, does not migrate hosted D1 accounts, and has not been certified as a production/live-AI replacement. Use the public app to evaluate current cloud and live-AI behavior.
+Names, roles and institution are taken from the team-supplied registration form. Specific engineering/design responsibilities were not supplied and are not invented. The form’s topic/title/summary fields are blank; the **Topic E** selection comes from the team’s project instructions and the implemented scope. Personal ID, passport, student ID, age, phone and individual email fields are deliberately not published. Adding this roster does not invite collaborators or grant repository permissions.
 
-## Submission and GitHub publication
+## Credits, contribution and license
 
-See `docs/GITHUB-HANDOFF.md` for source upload. Intended owner: **sachin133885**. No GitHub repository link is claimed until creation and upload are verified.
+- OpenAI ChatGPT/Codex assisted with code/documentation preparation; optional runtime AI is configured separately. [Asset provenance](docs/ASSET_PROVENANCE_1.2.json) identifies the existing generated dragon artwork and sprite. Decorative assets are not interface evidence.
+- Mozilla PDF.js and local font license notices remain in `src/vendor/` and `src/fonts/`. Those notices do not license the entire Finora application.
+- The [Jomidarpan README](https://github.com/deepmitra2002/jomidarpan) informed documentation organization only. Its product content, metrics and screenshots are not reused as Finora claims.
+- **No project-wide license is specified in the supplied source.** No license has been selected automatically; obtain the team’s permission before reuse or redistribution beyond the intended submission/repository publication.
+- Contributions: discuss substantial changes first, keep credentials out of commits, preserve integer-fen and confirmation/permission boundaries, and run the existing suites. [Contribution guide](CONTRIBUTING.md).
 
-Never upload `.env`, runtime credentials, database files, private backups or Git metadata. This archive contains code, synthetic fixtures, schema and generated artifacts, not existing users' records or hosted secrets.
-
-## Limits and licensing
-
-No real bank integration, payments, loan applications, automatic messaging, general OCR, official fapiao verification or guaranteed forecasts. The current snapshot is synthetic and fixed; change reporting policy deliberately before using current real records. Decision Receipt retention is bounded; export important evidence.
-
-No new open-source license is declared for team-owned code. Publishing on GitHub does not itself grant an open-source license. Retain PDF.js and font notices in `src/vendor/` and `src/fonts/`.
-
-Earlier implementation notes are preserved in `docs/development-history.md`. This README and current source take precedence over superseded descriptions there.
+Useful links: [User guide](docs/USER_GUIDE.md) · [Setup](docs/SETUP.md) · [Architecture](docs/ARCHITECTURE.md) · [Competition](docs/COMPETITION.md) · [Security policy](SECURITY.md) · [Release 1.2](docs/RELEASE_1.2.md) · [Screenshot checklist](docs/SCREENSHOTS.md).
