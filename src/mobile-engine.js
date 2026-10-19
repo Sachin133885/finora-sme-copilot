@@ -22,11 +22,10 @@ export function parseInvoiceText(text){if(typeof text!=='string'||text.length>20
 export const sectorTemplates={retail:{en:'Retail / e-commerce',zh:'零售 / 电商',categories:['sales','inventory','fees','marketing','rent'],tasks:['Review payment fees and refunds','Follow up on stock supplier bills']},restaurant:{en:'Restaurant / cafe',zh:'餐饮 / 咖啡店',categories:['sales','ingredients','delivery','payroll','rent'],tasks:['Review ingredient purchases','Reserve cash for payroll and rent']},trading:{en:'Trading / wholesale',zh:'贸易 / 批发',categories:['sales','inventory','logistics','fees','payroll'],tasks:['Track customer promised dates','Review supplier payment timing']},services:{en:'Agency / services',zh:'服务 / 工作室',categories:['sales','payroll','software','rent','other'],tasks:['Follow up on project invoices','Check payroll before hiring']}};
 
 // Appearance is a device preference, deliberately separate from business/cloud data.
-export function createAppearanceController({storage,root,media}){
- let preference='system';try{const saved=storage?.getItem('finora-appearance');if(['light','dark','system'].includes(saved))preference=saved;}catch{}
- const apply=()=>{const resolved=preference==='system'?(media?.matches?'dark':'light'):preference;root?.setAttribute?.('data-theme',resolved);if(root?.style)root.style.colorScheme=resolved;return resolved;};
- media?.addEventListener?.('change',apply);apply();
- return {get preference(){return preference;},set(value){if(!['light','dark','system'].includes(value))throw Error('appearance');preference=value;try{storage?.setItem('finora-appearance',value);}catch{}return apply();}};
+export function createAppearanceController({storage,root}){
+ let preference='light';try{if(storage?.getItem('finora-appearance')==='dark')preference='dark';}catch{}
+ const apply=()=>{root?.setAttribute?.('data-theme',preference);if(root?.style)root.style.colorScheme=preference;return preference;};apply();
+ return {get preference(){return preference;},set(value){if(!['light','dark','system'].includes(value))throw Error('appearance');preference=value==='dark'?'dark':'light';try{storage?.setItem('finora-appearance',preference);}catch{}return apply();}};
 }
 // A cash comparison, not a confidence/probability gauge. All money remains integer fen.
 export function cashGauge(s){const scale=Math.max(1,s.current,s.lowest,s.buffer);return {available:s.available,shortfall:Math.max(0,-s.lowest),bufferPercent:Math.max(0,Math.min(100,s.buffer/scale*100)),forecastPercent:Math.max(0,Math.min(100,s.lowest/scale*100)),currentPercent:Math.max(0,Math.min(100,s.current/scale*100))};}

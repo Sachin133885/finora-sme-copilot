@@ -6,7 +6,7 @@ export default {async fetch(request,env={}){
  const url=new URL(request.url),authenticated=!!request.headers.get('oai-authenticated-user-id'),configured=!!(env.LLM_API_KEY&&env.LLM_ENDPOINT&&env.LLM_MODEL);
  if(request.method==='GET'){
   if(url.pathname==='/')return new Response(page,{headers:{...security,'content-type':'text/html;charset=utf-8'}});
-  const file=url.pathname.slice(1);if(fontAssets[file])return new Response(Uint8Array.from(atob(fontAssets[file]),c=>c.charCodeAt(0)),{headers:{...security,'content-type':'font/woff2','cache-control':'public,max-age=86400'}});if(sources[file])return new Response(sources[file],{headers:{...security,'content-type':'text/javascript;charset=utf-8'}});
+  const file=url.pathname.slice(1);if(imageAssets[file])return new Response(Uint8Array.from(atob(imageAssets[file]),c=>c.charCodeAt(0)),{headers:{...security,'content-type':'image/png','cache-control':'public,max-age=86400'}});if(fontAssets[file])return new Response(Uint8Array.from(atob(fontAssets[file]),c=>c.charCodeAt(0)),{headers:{...security,'content-type':'font/woff2','cache-control':'public,max-age=86400'}});if(sources[file])return new Response(sources[file],{headers:{...security,'content-type':file.endsWith('.css')?'text/css;charset=utf-8':'text/javascript;charset=utf-8'}});
   if(url.pathname==='/api/status')return json({mode:configured?'configured':'demo',asOf:AS_OF,authenticated,accounts:!!env.DB,documents:false,identityMode:'chatgpt',track:'E'});
  }
  if(!['GET','POST','PUT','DELETE'].includes(request.method))return json({error:'Method not allowed'},405);
